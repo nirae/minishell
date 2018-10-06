@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/02 12:06:32 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/06 20:21:17 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int		main(int ac, char **av, char **env)
 	char	**tmp;
 	struct stat st;
 	int		i;
+	char 	str[PATH_MAX + 1];
 
 	(void)ac;
 	(void)av;
@@ -71,13 +72,32 @@ int		main(int ac, char **av, char **env)
 		// Lis l'entree standard
 		if (get_next_line(0, &line) < 0)
 			error();
-		if (ft_strcmp(line, "exit") == 0)
-		{
-			ft_printf("c'est ca degage\n");
-			exit(EXIT_SUCCESS);
-		}
 		// recupere la commande et les arguments
 		command = ft_strsplit(line, ' ');
+		if (ft_strcmp(command[0], "exit") == 0)
+		{
+			ft_printf("c'est ca degage\n");
+			if (command[1])
+				exit(ft_atoi(command[1]));
+			else
+				exit(EXIT_SUCCESS);
+		}
+		if (ft_strcmp(command[0], "mypwd") == 0)
+		{
+			getcwd(str, PATH_MAX + 1);
+			ft_printf("pwd : %s\n", str);
+			continue;
+		}
+		if (ft_strcmp(command[0], "cd") == 0)
+		{
+			if ((chdir(command[1])) < 0)
+				ft_printf("chdir failed\n");
+			else
+				ft_printf("moving to %s\n", command[1]);
+			continue;
+		}
+		// recupere la commande et les arguments
+		//command = ft_strsplit(line, ' ');
 		// recupere la liste du path environnement
 		i = -1;
 		while (env[++i])
