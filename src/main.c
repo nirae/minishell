@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/06 20:21:17 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/08 21:23:47 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int		main(int ac, char **av, char **env)
 	char	**tmp;
 	struct stat st;
 	int		i;
+	int 	y;
 	char 	str[PATH_MAX + 1];
 
 	(void)ac;
@@ -72,6 +73,7 @@ int		main(int ac, char **av, char **env)
 		// Lis l'entree standard
 		if (get_next_line(0, &line) < 0)
 			error();
+		ft_printf("%s\n", line);
 		// recupere la commande et les arguments
 		command = ft_strsplit(line, ' ');
 		if (ft_strcmp(command[0], "exit") == 0)
@@ -82,18 +84,31 @@ int		main(int ac, char **av, char **env)
 			else
 				exit(EXIT_SUCCESS);
 		}
-		if (ft_strcmp(command[0], "mypwd") == 0)
+		else if (ft_strcmp(command[0], "mypwd") == 0)
 		{
 			getcwd(str, PATH_MAX + 1);
 			ft_printf("pwd : %s\n", str);
 			continue;
 		}
-		if (ft_strcmp(command[0], "cd") == 0)
+		else if (ft_strcmp(command[0], "cd") == 0)
 		{
 			if ((chdir(command[1])) < 0)
 				ft_printf("chdir failed\n");
 			else
 				ft_printf("moving to %s\n", command[1]);
+			continue;
+		}
+		else if (ft_strcmp(command[0], "echo") == 0)
+		{
+			y = 0;
+			while (command[1 + y])
+			{
+				ft_printf("%s", command[1 + y]);
+				y++;
+				if (command[1 + y])
+					ft_printf(" ");
+			}
+			ft_printf("\n");
 			continue;
 		}
 		// recupere la commande et les arguments
