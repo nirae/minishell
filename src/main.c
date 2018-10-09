@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/09 15:48:05 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/09 18:37:06 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,32 @@ int		minishell_parser(char *input, char ***command)
 	return (1);
 }
 
-int		main(int ac, char **av, char **env)
+/*
+**	A proteger!!!!!!
+*/
+
+char		**get_my_env(char **environ)
+{
+	int		i;
+	char	**my_env = NULL;
+
+	i = -1;
+	while (environ[++i]);
+	my_env = ft_memalloc((i + 1) * sizeof(char *));
+	i = -1;
+	while (environ[++i])
+		my_env[i] = ft_strdup(environ[i]);
+	my_env[i] = NULL;
+	return (my_env);
+}
+
+int		main(int ac, char **av, char **environ)
 {
 	pid_t	father;
 	char	*line;
 	char	**command;
 	char	**env_path;
+	char	**env;
 	char	**tmp;
 	struct stat st;
 	int		i;
@@ -75,6 +95,8 @@ int		main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	// copie de environ
+	env = get_my_env(environ);
 	/*
 	**	Recupere tous les repos de PATH
 	*/
@@ -123,10 +145,55 @@ int		main(int ac, char **av, char **env)
 		}
 		else if (ft_strcmp(command[0], "cd") == 0)
 		{
+			char 	oldpwd[PATH_MAX + 1];
+			// recupere le pwd
+			getcwd(oldpwd, PATH_MAX + 1);
 			if ((chdir(command[1])) < 0)
 				ft_printf("chdir failed\n");
 			else
+			{
+
+				// Mettre a jour PWD et OLDPWD dans l'env
+				// OLDPWD
+				i = -1;
+				while (env[++i])
+				{
+					tmp = ft_strsplit(env[i], '=');
+					if (ft_strcmp(tmp[0], "OLDPWD") == 0)
+					{
+						ft_memdel((void **)&env[i]);
+						if (!(env[i] = ft_strjoin("OLDPWD=", oldpwd)))
+							ft_printf("strjoin failed\n");
+					}
+				}
+				// PWD
+				char 	pwd[PATH_MAX + 1];
+				// recupere le pwd
+				getcwd(pwd, PATH_MAX + 1);
+				i = -1;
+				while (env[++i])
+				{
+					tmp = ft_strsplit(env[i], '=');
+					if (ft_strcmp(tmp[0], "PWD") == 0)
+					{
+						ft_memdel((void **)&env[i]);
+						if (!(env[i] = ft_strjoin("PWD=", pwd)))
+							ft_printf("strjoin failed\n");
+					}
+				}
+				//
 				ft_printf("moving to %s\n", command[1]);
+			}
+			continue;
+		}
+		else if (ft_strcmp(command[0], "env") == 0)
+		{
+			int y = -1;
+			if (env)
+			{
+				while (env[++y])
+					ft_printf("%s\n", env[y]);
+			}
 			continue;
 		}
 		else if (ft_strcmp(command[0], "echo") == 0)
