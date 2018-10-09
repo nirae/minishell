@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/16 11:38:15 by ndubouil          #+#    #+#             */
-/*   Updated: 2017/11/20 15:29:18 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/09 14:43:30 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int		ft_strcmp(const char *s1, const char *s2)
 {
 	int i;
 
+	if (!s1 || !s2)
+		return (-1);
 	i = 0;
 	while (s1[i] == s2[i])
 	{

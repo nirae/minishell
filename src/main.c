@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/08 21:23:47 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/09 15:48:05 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static char	*get_complete_path(char *parent, char *name)
 	char	*tmp;
 	char	*result;
 
+	if (name[0] == '/' || name[0] == '.')
+		return (name);
 	if (parent[ft_strlen(parent) - 1] == '/')
 	{
 		if (!(tmp = ft_strdup(parent)))
@@ -50,6 +52,15 @@ static char	*get_complete_path(char *parent, char *name)
 	return (result);
 }
 
+int		minishell_parser(char *input, char ***command)
+{
+	if (input[0] == 0)
+		return (0);
+	if (!(*command = ft_strsplit(input, ' ')))
+		return (0);
+	return (1);
+}
+
 int		main(int ac, char **av, char **env)
 {
 	pid_t	father;
@@ -64,18 +75,38 @@ int		main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	/*
+	**	Recupere tous les repos de PATH
+	*/
+	i = -1;
+	while (env[++i])
+	{
+		tmp = ft_strsplit(env[i], '=');
+		if (ft_strcmp(tmp[0], "PATH") == 0)
+			env_path = ft_strsplit(tmp[1], ':');
+		ft_memdel((void **)&tmp);
+	}
+	/*
+	**
+	*/
 	while (666)
 	{
 		// Affiche le prompt
 		ft_printf("%s", PROMPT);
-		// Surveille le signal de ctrl C
+		// Surveille le signal de CTRL C
 		signal(SIGINT, catch_signal);
 		// Lis l'entree standard
+		line = NULL;
 		if (get_next_line(0, &line) < 0)
 			error();
-		ft_printf("%s\n", line);
-		// recupere la commande et les arguments
-		command = ft_strsplit(line, ' ');
+		/*
+		**	PARSING
+		*/
+		if (!(minishell_parser(line, &command)))
+			continue;
+		/*
+		**	GESTION DES BULTINS
+		*/
 		if (ft_strcmp(command[0], "exit") == 0)
 		{
 			ft_printf("c'est ca degage\n");
@@ -111,33 +142,37 @@ int		main(int ac, char **av, char **env)
 			ft_printf("\n");
 			continue;
 		}
-		// recupere la commande et les arguments
-		//command = ft_strsplit(line, ' ');
-		// recupere la liste du path environnement
-		i = -1;
-		while (env[++i])
-		{
-			tmp = ft_strsplit(env[i], '=');
-			if (ft_strcmp(tmp[0], "PATH") == 0)
-				env_path = ft_strsplit(tmp[1], ':');
-			ft_memdel((void **)&tmp);
-		}
-		// Boucle sur tous les chemins de l'env path
+		/*
+		**	FIN DES BUILTINS
+		*/
+		// Recherche du fichier dans les repos du path
 		i = -1;
 		while (env_path[++i])
 		{
 			// Si le fichier existe pas dans ce path, continue a boucler
 			if ((lstat(get_complete_path(env_path[i], command[0]), &st)) < 0)
+			{
+				// Si c'etait le dernier -> pas trouve
+				if (!env_path[i + 1])
+				{
+					ft_printf("minishell: command not found: %s\n", command[0]);
+					break;
+				}
 				continue;
+			}
 			// Si le fichier est trouvé on l'execute
-			ft_printf("tiens ton resultat de merde :\n");
-			father = fork();
-			if (father == 0)
-				execve(get_complete_path(env_path[i], command[0]), command, env);
-			else if (father < 0)
-				ft_printf("fail\n");
-			else if (father > 0)
-				wait(&father);
+			else
+			{
+				ft_printf("tiens ton resultat de merde :\n");
+				father = fork();
+				if (father == 0)
+					execve(get_complete_path(env_path[i], command[0]), command, env);
+				else if (father < 0)
+					ft_printf("fail\n");
+				else if (father > 0)
+					wait(&father);
+				break;
+			}
 		}
 		//ft_printf("tiens ton resultat de merde : %s\n", line);
 		ft_strdel(&line);
