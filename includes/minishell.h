@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/06 19:37:15 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/11 19:00:12 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,11 @@ typedef struct		s_command
 	char			*path;
 	char			**args;
 }					t_command;
+
+typedef struct		s_varenv
+{
+	char			*name;
+	char			*content;
+}					t_varenv;
 
 #endif
