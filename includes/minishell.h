@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/11 19:00:12 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/15 16:55:27 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <limits.h>
 
 # define PROMPT "tape ta commande connard > "
+
+# define HASH_TAB_MAX	4096
 
 typedef struct		s_command
 {

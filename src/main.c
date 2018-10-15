@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/12 21:14:15 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/10/15 17:17:45 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,37 @@ void		print_lstenv(t_list *lst)
 	ft_printf("%s=%s\n", ((t_varenv *)(lst->content))->name, ((t_varenv *)(lst->content))->content);
 }
 
+int			hachage(char *str)
+{
+	int		i;
+	int		result;
+
+	i = -1;
+	result = 0;
+	while (str[++i])
+		result += str[i];
+	result %= 100;
+	return (result);
+}
+
+void		init_hash_tab(t_varenv **tab[HASH_TAB_MAX])
+{
+	int i;
+
+	i = -1;
+	while (*tab[++i])
+		*tab[i] = NULL;
+}
+
+void		add_hash_tab(t_varenv **tab[HASH_TAB_MAX], char *var)
+{
+	char	**split;
+
+	if (!(split = ft_strsplit(var, '=')))
+		ft_printf("strsplit a foire\n");
+	*tab[hachage(split[0])] = create_varenv(split[0], split[1]);
+}
+
 int			main(int ac, char **av, char **environ)
 {
 	pid_t	father;
@@ -207,6 +238,11 @@ int			main(int ac, char **av, char **environ)
 	int		i;
 	int 	y;
 	char 	str[PATH_MAX + 1];
+
+	t_varenv	*hash_tab[HASH_TAB_MAX];
+
+	init_hash_tab(&hash_tab);
+
 
 	(void)ac;
 	(void)av;
