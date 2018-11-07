@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/10/17 17:44:19 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:47:37 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,76 @@ void	catch_signal(int signal)
 		ft_printf("\n%s", PROMPT);
 }
 
+void	catch_signal_echo(int signal)
+{
+	if (signal == SIGINT)
+	{
+		
+	}
+}
+
 void	error()
 {
 	ft_printf("minishell failed\n");
 	exit(EXIT_FAILURE);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////// ECHO ///////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+static int		echo(char *str)
+{
+	int i = -1;
+	int y = 0;
+	char *tmp;
+	char final_str[4096];
+	int nb_quotes = 0;
+	char *line;
+
+	signal(SIGINT, catch_signal);
+	final_str[0] = 0;
+	while (str[++i])
+	{
+		if (str[i] == ' ' && (nb_quotes % 2) == 0)
+			continue;
+		else if (str[i] == '\"')
+		{
+			nb_quotes++;
+			continue;
+		}
+		else
+		{
+			final_str[y] = str[i];
+			y++;
+			if (str[i + 1] == ' ')
+			{
+				final_str[y] = ' ';
+				y++;
+			}
+		}
+		if (str[i + 1] == 0 && (nb_quotes % 2) != 0)
+		{
+			ft_printf("termine ta quote putain>");
+			line = NULL;
+			if (get_next_line(0, &line) < 0)
+				error();
+			if (!line[0])
+				line[0] = '\n';
+			tmp = str;
+			str = ft_strjoin(tmp, line);
+			ft_strdel(&line);
+		}
+	}
+	final_str[y] = '\0';
+	if (final_str[0])
+		ft_printf("%s", final_str);
+	return (TRUE);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////// END ECHO ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 /*
 **	Return the complete path of a file name or exit if malloc failed
@@ -195,36 +260,38 @@ void		print_lstenv(t_list *lst)
 	ft_printf("%s=%s\n", ((t_varenv *)(lst->content))->name, ((t_varenv *)(lst->content))->content);
 }
 
-int			hachage(char *str)
-{
-	int		i;
-	int		result;
+// int			hachage(char *str)
+// {
+// 	int		i;
+// 	int		result;
+//
+// 	i = -1;
+// 	result = 0;
+// 	while (str[++i])
+// 		result += str[i];
+// 	result %= 100;
+// 	return (result);
+// }
+//
+// void		init_hash_tab(t_varenv **tab[HASH_TAB_MAX])
+// {
+// 	int i;
+//
+// 	i = -1;
+// 	while (*tab[++i])
+// 		*tab[i] = NULL;
+// }
+//
+// void		add_hash_tab(t_varenv **tab[HASH_TAB_MAX], char *var)
+// {
+// 	char	**split;
+//
+// 	if (!(split = ft_strsplit(var, '=')))
+// 		ft_printf("strsplit a foire\n");
+// 	*tab[hachage(split[0])] = create_varenv(split[0], split[1]);
+// }
 
-	i = -1;
-	result = 0;
-	while (str[++i])
-		result += str[i];
-	result %= 100;
-	return (result);
-}
 
-void		init_hash_tab(t_varenv **tab[HASH_TAB_MAX])
-{
-	int i;
-
-	i = -1;
-	while (*tab[++i])
-		*tab[i] = NULL;
-}
-
-void		add_hash_tab(t_varenv **tab[HASH_TAB_MAX], char *var)
-{
-	char	**split;
-
-	if (!(split = ft_strsplit(var, '=')))
-		ft_printf("strsplit a foire\n");
-	*tab[hachage(split[0])] = create_varenv(split[0], split[1]);
-}
 
 int			main(int ac, char **av, char **environ)
 {
@@ -236,12 +303,12 @@ int			main(int ac, char **av, char **environ)
 	t_list	*tmplst;
 	struct stat st;
 	int		i;
-	int 	y;
+//	int 	y;
 	char 	str[PATH_MAX + 1];
 
-	t_varenv	*hash_tab[HASH_TAB_MAX];
-
-	init_hash_tab(&hash_tab);
+	// t_varenv	*hash_tab[HASH_TAB_MAX];
+	//
+	// init_hash_tab(&hash_tab);
 
 
 	(void)ac;
@@ -328,14 +395,16 @@ int			main(int ac, char **av, char **environ)
 		}
 		else if (ft_strcmp(command[0], "echo") == 0)
 		{
-			y = 0;
-			while (command[1 + y])
-			{
-				ft_printf("%s", command[1 + y]);
-				y++;
-				if (command[1 + y])
-					ft_printf(" ");
-			}
+			// y = 0;
+			// while (command[1 + y])
+			// {
+			// 	ft_printf("%s", command[1 + y]);
+			// 	y++;
+			// 	if (command[1 + y])
+			// 		ft_printf(" ");
+			// }
+			if (command[1])
+				echo(&line[4]);
 			ft_printf("\n");
 			continue;
 		}
