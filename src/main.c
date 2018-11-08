@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/08 15:44:28 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/08 18:28:49 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ static int		echo(char *str)
 	int y = 0;
 	char *tmp;
 	char final_str[4096];
-	int nb_quotes = 0;
+	int nb_double_quotes = 0;
+//	int nb_simple_quotes = 0;
 	char *line;
 
 	//signal(SIGINT, catch_signal_echo);
@@ -60,11 +61,11 @@ static int		echo(char *str)
 	while (str[++i])
 	{
 		signal(SIGINT, catch_signal);
-		if (str[i] == ' ' && (nb_quotes % 2) == 0)
+		if (str[i] == ' ' && (nb_double_quotes % 2) == 0)
 			continue;
 		else if (str[i] == '\"')
 		{
-			nb_quotes++;
+			nb_double_quotes++;
 			continue;
 		}
 		else
@@ -77,7 +78,7 @@ static int		echo(char *str)
 				y++;
 			}
 		}
-		if (str[i + 1] == 0 && (nb_quotes % 2) != 0)
+		if (str[i + 1] == 0 && (nb_double_quotes % 2) != 0)
 		{
 			ft_printf("termine ta quote putain>");
 			line = NULL;
