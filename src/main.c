@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/07 18:47:37 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/08 10:35:59 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,15 @@ void	catch_signal(int signal)
 	if (signal == SIGINT)
 		ft_printf("\n%s", PROMPT);
 }
-
-void	catch_signal_echo(int signal)
-{
-	if (signal == SIGINT)
-	{
-		
-	}
-}
+//
+// void	catch_signal_echo(int signal)
+// {
+// 	if (signal == SIGINT)
+// 	{
+// 		kill(g_pid, SIGTERM);
+// 		ft_printf("\n%s", PROMPT);
+// 	}
+// }
 
 void	error()
 {
@@ -45,7 +46,7 @@ static int		echo(char *str)
 	int nb_quotes = 0;
 	char *line;
 
-	signal(SIGINT, catch_signal);
+//	signal(SIGINT, catch_signal_echo);
 	final_str[0] = 0;
 	while (str[++i])
 	{
@@ -295,7 +296,7 @@ void		print_lstenv(t_list *lst)
 
 int			main(int ac, char **av, char **environ)
 {
-	pid_t	father;
+//	pid_t	father;
 	char	*line;
 	char	**command;
 	char	**env_paths;
@@ -404,7 +405,14 @@ int			main(int ac, char **av, char **environ)
 			// 		ft_printf(" ");
 			// }
 			if (command[1])
-				echo(&line[4]);
+			{
+				if (g_pid == 0)
+					echo(&line[4]);
+				else if (g_pid < 0)
+					ft_printf("fail\n");
+				else if (g_pid > 0)
+					wait(&g_pid);
+			}
 			ft_printf("\n");
 			continue;
 		}
@@ -430,13 +438,13 @@ int			main(int ac, char **av, char **environ)
 			else
 			{
 				ft_printf("tiens ton resultat de merde :\n");
-				father = fork();
-				if (father == 0)
+				g_pid = fork();
+				if (g_pid == 0)
 					execve(get_complete_path(env_paths[i], command[0]), command, environ);
-				else if (father < 0)
+				else if (g_pid < 0)
 					ft_printf("fail\n");
-				else if (father > 0)
-					wait(&father);
+				else if (g_pid > 0)
+					wait(&g_pid);
 				break;
 			}
 		}
