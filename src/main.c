@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/08 10:35:59 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/08 15:44:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 void	catch_signal(int signal)
 {
 	if (signal == SIGINT)
+	{
 		ft_printf("\n%s", PROMPT);
+	}
 }
-//
+
+void	catch_signal_kill(int signal)
+{
+	if (signal == SIGINT)
+	{
+		kill(g_pid, SIGTERM);
+	}
+}
+
 // void	catch_signal_echo(int signal)
 // {
 // 	if (signal == SIGINT)
 // 	{
-// 		kill(g_pid, SIGTERM);
-// 		ft_printf("\n%s", PROMPT);
+//
 // 	}
 // }
 
@@ -46,10 +55,11 @@ static int		echo(char *str)
 	int nb_quotes = 0;
 	char *line;
 
-//	signal(SIGINT, catch_signal_echo);
+	//signal(SIGINT, catch_signal_echo);
 	final_str[0] = 0;
 	while (str[++i])
 	{
+		signal(SIGINT, catch_signal);
 		if (str[i] == ' ' && (nb_quotes % 2) == 0)
 			continue;
 		else if (str[i] == '\"')
@@ -76,6 +86,8 @@ static int		echo(char *str)
 			if (!line[0])
 				line[0] = '\n';
 			tmp = str;
+			str = ft_strjoin(tmp, "\n");
+			tmp = str;
 			str = ft_strjoin(tmp, line);
 			ft_strdel(&line);
 		}
@@ -83,7 +95,7 @@ static int		echo(char *str)
 	final_str[y] = '\0';
 	if (final_str[0])
 		ft_printf("%s", final_str);
-	return (TRUE);
+	exit(0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -151,11 +163,13 @@ t_varenv	*create_varenv(char *name, char *content)
 
 	// Gerer l'erreur
 	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
-		exit(0);
+		error();
 	if (!(varenv->name = ft_strdup(name)))
-		exit(0);
-	if (!(varenv->content = ft_strdup(content)))
-		exit(0);
+		error();
+	if (!content)
+		varenv->content = NULL;
+	else if (!(varenv->content = ft_strdup(content)))
+		error();
 	return (varenv);
 }
 
@@ -406,12 +420,20 @@ int			main(int ac, char **av, char **environ)
 			// }
 			if (command[1])
 			{
+				g_pid = fork();
 				if (g_pid == 0)
+				{
 					echo(&line[4]);
+					//kill(g_pid, SIGTERM);
+				}
 				else if (g_pid < 0)
 					ft_printf("fail\n");
 				else if (g_pid > 0)
+				{
+					signal(SIGINT, catch_signal_kill);
 					wait(&g_pid);
+				}
+				//echo(&line[4]);
 			}
 			ft_printf("\n");
 			continue;
@@ -440,11 +462,17 @@ int			main(int ac, char **av, char **environ)
 				ft_printf("tiens ton resultat de merde :\n");
 				g_pid = fork();
 				if (g_pid == 0)
+				{
 					execve(get_complete_path(env_paths[i], command[0]), command, environ);
+					//kill(g_pid, SIGTERM);
+				}
 				else if (g_pid < 0)
 					ft_printf("fail\n");
 				else if (g_pid > 0)
+				{
+					signal(SIGINT, catch_signal_kill);
 					wait(&g_pid);
+				}
 				break;
 			}
 		}
