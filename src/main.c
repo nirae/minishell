@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/08 18:28:49 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/09 17:42:01 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,6 +319,7 @@ int			main(int ac, char **av, char **environ)
 	t_list	*tmplst;
 	struct stat st;
 	int		i;
+	int		status;
 //	int 	y;
 	char 	str[PATH_MAX + 1];
 
@@ -432,7 +433,7 @@ int			main(int ac, char **av, char **environ)
 				else if (g_pid > 0)
 				{
 					signal(SIGINT, catch_signal_kill);
-					wait(&g_pid);
+					waitpid(g_pid, &status, 0);
 				}
 				//echo(&line[4]);
 			}
@@ -472,7 +473,7 @@ int			main(int ac, char **av, char **environ)
 				else if (g_pid > 0)
 				{
 					signal(SIGINT, catch_signal_kill);
-					wait(&g_pid);
+					waitpid(g_pid, &status, 0);
 				}
 				break;
 			}
