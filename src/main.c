@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/09 17:42:01 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/10 22:09:51 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,52 @@ static int		echo(char *str)
 	char *tmp;
 	char final_str[4096];
 	int nb_double_quotes = 0;
-//	int nb_simple_quotes = 0;
+	int nb_simple_quotes = 0;
+// 1 simple
+// 2 double
+	int first_quote = 0;
 	char *line;
 
 	//signal(SIGINT, catch_signal_echo);
 	final_str[0] = 0;
 	while (str[++i])
 	{
+		ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
 		signal(SIGINT, catch_signal);
-		if (str[i] == ' ' && (nb_double_quotes % 2) == 0)
+		if (str[i] == ' ' && (nb_double_quotes % 2) == 0 && (nb_simple_quotes % 2) == 0)
 			continue;
 		else if (str[i] == '\"')
 		{
+			if (first_quote == 1 && (nb_simple_quotes % 2) != 0)
+			{
+				final_str[y] = str[i];
+				y++;
+				if (str[i + 1] == ' ')
+				{
+					final_str[y] = ' ';
+					y++;
+				}
+			}
 			nb_double_quotes++;
+			if ((nb_simple_quotes % 2) == 0)
+				first_quote = 2;
+			continue;
+		}
+		else if (str[i] == '\'')
+		{
+			if (first_quote == 2 && (nb_double_quotes % 2) != 0)
+			{
+				final_str[y] = str[i];
+				y++;
+				if (str[i + 1] == ' ')
+				{
+					final_str[y] = ' ';
+					y++;
+				}
+			}
+			nb_simple_quotes++;
+			if ((nb_double_quotes % 2) == 0)
+				first_quote = 1;
 			continue;
 		}
 		else
@@ -78,19 +111,22 @@ static int		echo(char *str)
 				y++;
 			}
 		}
-		if (str[i + 1] == 0 && (nb_double_quotes % 2) != 0)
+		if (str[i + 1] == 0)
 		{
-			ft_printf("termine ta quote putain>");
-			line = NULL;
-			if (get_next_line(0, &line) < 0)
-				error();
-			if (!line[0])
-				line[0] = '\n';
-			tmp = str;
-			str = ft_strjoin(tmp, "\n");
-			tmp = str;
-			str = ft_strjoin(tmp, line);
-			ft_strdel(&line);
+			if (((nb_double_quotes % 2) != 0 && first_quote == 2) || ((nb_simple_quotes % 2) != 0 && first_quote == 1))
+			{
+				ft_printf("termine ta quote putain>");
+				line = NULL;
+				if (get_next_line(0, &line) < 0)
+					error();
+				if (!line[0])
+					line[0] = '\n';
+				tmp = str;
+				str = ft_strjoin(tmp, "\n");
+				tmp = str;
+				str = ft_strjoin(tmp, line);
+				ft_strdel(&line);
+			}
 		}
 	}
 	final_str[y] = '\0';
