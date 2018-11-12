@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/10 22:09:51 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/12 16:13:13 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int		echo(char *str)
 	final_str[0] = 0;
 	while (str[++i])
 	{
-		ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
+		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
 		signal(SIGINT, catch_signal);
 		if (str[i] == ' ' && (nb_double_quotes % 2) == 0 && (nb_simple_quotes % 2) == 0)
 			continue;
@@ -73,16 +73,16 @@ static int		echo(char *str)
 			{
 				final_str[y] = str[i];
 				y++;
-				if (str[i + 1] == ' ')
-				{
-					final_str[y] = ' ';
-					y++;
-				}
+				// if (str[i + 1] == ' ')
+				// {
+				// 	final_str[y] = ' ';
+				// 	y++;
+				// }
 			}
 			nb_double_quotes++;
 			if ((nb_simple_quotes % 2) == 0)
 				first_quote = 2;
-			continue;
+			//continue;
 		}
 		else if (str[i] == '\'')
 		{
@@ -90,16 +90,16 @@ static int		echo(char *str)
 			{
 				final_str[y] = str[i];
 				y++;
-				if (str[i + 1] == ' ')
-				{
-					final_str[y] = ' ';
-					y++;
-				}
+				// if (str[i + 1] == ' ')
+				// {
+				// 	final_str[y] = ' ';
+				// 	y++;
+				// }
 			}
 			nb_simple_quotes++;
 			if ((nb_double_quotes % 2) == 0)
 				first_quote = 1;
-			continue;
+		//	continue;
 		}
 		else
 		{
@@ -128,6 +128,7 @@ static int		echo(char *str)
 				ft_strdel(&line);
 			}
 		}
+		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
 	}
 	final_str[y] = '\0';
 	if (final_str[0])
