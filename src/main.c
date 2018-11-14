@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/12 16:13:13 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/14 17:52:30 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,12 +167,42 @@ static char	*get_complete_path(char *parent, char *name)
 	return (result);
 }
 
-int		minishell_parser(char *input, char ***command)
+int		minishell_parser(char *input/*, char ****command*/)
 {
+	int		i;
+	char	**commands;
+	char	***command;
+
+	command = ft_memalloc(1000000000);
 	if (input[0] == 0)
-		return (0);
-	if (!(*command = ft_strsplit(input, ' ')))
-		return (0);
+		return (FALSE);
+	if (!(commands = ft_strsplit(input, ';')))
+		return (FALSE);
+	i = -1;
+	while (commands[++i])
+	{
+		if (!(command[i] = ft_strsplit(commands[i], ' ')))
+			return (FALSE);
+		command[i + 1] = NULL;
+	}
+	//command[i] = NULL;
+	i = -1;
+	int y = -1;
+	//int z = -1;
+	while (commands[++i])
+	{
+		while (command[i][++y])
+		{
+			ft_printf("i = %d, %s\n", i, command[i][y]);
+			// while (command[i][y][++z])
+			// {
+			// 	ft_printf("i : %d, y : %d, z : %d\n", i, y, z);
+			// }
+		}
+	}
+	// if (!(*command = ft_strsplit(input, ' ')))
+	// 	return (0);
+	exit(0);
 	return (1);
 }
 
@@ -280,7 +310,6 @@ void		del_lst(void *content, size_t size)
 int			remove_one(t_list **lst, char *name)
 {
 	t_list	*prev;
-//	t_list	*next;
 	t_list	*tmp;
 
 
@@ -301,8 +330,6 @@ int			remove_one(t_list **lst, char *name)
 				ft_lstdelone(&prev, del_lst);
 				return (1);
 		}
-//		prev = tmp->next;
-//		next = tmp->next;
 		tmp = tmp->next;
 	}
 	return (0);
@@ -350,7 +377,7 @@ int			main(int ac, char **av, char **environ)
 {
 //	pid_t	father;
 	char	*line;
-	char	**command;
+	char	**command = NULL;
 	char	**env_paths;
 	t_list	*env;
 	t_list	*tmplst;
@@ -377,8 +404,6 @@ int			main(int ac, char **av, char **environ)
 	*/
 	while (666)
 	{
-		/*// Affiche le prompt
-		ft_printf("%s", PROMPT);*/
 		// Surveille le signal de CTRL C
 		signal(SIGINT, catch_signal);
 		// Affiche le prompt
@@ -390,7 +415,7 @@ int			main(int ac, char **av, char **environ)
 		/*
 		**	PARSING
 		*/
-		if (!(minishell_parser(line, &command)))
+		if (!(minishell_parser(line/*, &command*/)))
 			continue;
 		/*
 		**	GESTION DES BULTINS
