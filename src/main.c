@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/14 17:52:30 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/16 19:36:46 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,13 +167,135 @@ static char	*get_complete_path(char *parent, char *name)
 	return (result);
 }
 
-int		minishell_parser(char *input/*, char ****command*/)
+////////////////////////////////////////////////////////////////////////////////
+								//PARSING
+////////////////////////////////////////////////////////////////////////////////
+
+// char		**ft_strsplit_parser(char const *s)
+// {
+// 	char	**tab;
+// 	int		i;
+// 	int		j;
+// 	int		k;
+//
+// 	if (s == NULL)
+// 		return (NULL);
+// 	if (!(tab = ft_memalloc(100000000)))
+// 		return (0);
+// 	i = -1;
+// 	j = 0;
+// 	while (s[++i])
+// 	{
+// 		k = 0;
+// 		if (j == 0)
+// 			if (!(tab[j] = ft_strnew(10000)))
+// 				return (0);
+// 		if (s[i] == "\"")
+// 		{
+// 			i++;
+//
+// 		}
+// 		while (s[i] == ' ' || s[i] == '\t')
+// 			i++;
+// 		while (s[j] != ' ' && s[j] != '\0')
+// 			tab[i][k++] = s[j++];
+// 		tab[i][k] = '\0';
+// 	}
+// 	tab[i] = 0;
+// 	return (tab);
+// }
+
+char		**ft_strsplit_parser2(char *str)
+{
+	int		i;
+	int		j;
+	int		y;
+	char	**result;
+	char	*line;
+	char	*tmp;
+
+
+	if (str == NULL)
+		return (NULL);
+	if (!(result = ft_memalloc(100000000)))
+		return (0);
+	i = -1;
+	j = 0;
+	while (str[++i])
+	{
+		//signal(SIGINT, catch_signal);
+		if (str[i] == ' ' || str[i] == '\t')
+			continue;
+		else if (str[i] == '\"')
+		{
+			if (!(result[j] = ft_strnew(10000)))
+				return (0);
+			y = 0;
+			while (str[i++])
+			{
+				if (str[i] == '\"')
+				{
+					j++;
+					break;
+				}
+				result[j][y] = str[i];
+				y++;
+				if (str[i + 1] == 0)
+				{
+					ft_printf("termine ta quote putain>");
+					line = NULL;
+					if (get_next_line(0, &line) < 0)
+						error();
+					if (!line[0])
+						line[0] = '\n';
+					tmp = str;
+					str = ft_strjoin(tmp, "\n");
+					tmp = str;
+					str = ft_strjoin(tmp, line);
+					ft_strdel(&line);
+					continue;
+				}
+			}
+		}
+		if (!(result[j] = ft_strnew(10000)))
+			return (0);
+		y = 0;
+		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"')
+		{
+			result[j][y] = str[i];
+			y++;
+			i++;
+		}
+		j++;
+		// else if (str[i] == '\'')
+		// {
+		// 	if (first_quote == 2 && (nb_double_quotes % 2) != 0)
+		// 	{
+		// 		final_str[y] = str[i];
+		// 		y++;
+		// 		// if (str[i + 1] == ' ')
+		// 		// {
+		// 		// 	final_str[y] = ' ';
+		// 		// 	y++;
+		// 		// }
+		// 	}
+		// 	nb_simple_quotes++;
+		// 	if ((nb_double_quotes % 2) == 0)
+		// 		first_quote = 1;
+		// //	continue;
+		// }
+		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
+	}
+	return (result);
+}
+
+int		minishell_parser(char *input, char ****command)
 {
 	int		i;
 	char	**commands;
-	char	***command;
 
-	command = ft_memalloc(1000000000);
+	*command = ft_memalloc((ft_strlen(input) + 1) * 8);
+
 	if (input[0] == 0)
 		return (FALSE);
 	if (!(commands = ft_strsplit(input, ';')))
@@ -181,30 +303,32 @@ int		minishell_parser(char *input/*, char ****command*/)
 	i = -1;
 	while (commands[++i])
 	{
-		if (!(command[i] = ft_strsplit(commands[i], ' ')))
+		// if (!((*command)[i] = ft_strsplit(commands[i], ' ')))
+		if (!((*command)[i] = ft_strsplit_parser2(commands[i])))
 			return (FALSE);
-		command[i + 1] = NULL;
 	}
-	//command[i] = NULL;
-	i = -1;
-	int y = -1;
-	//int z = -1;
-	while (commands[++i])
-	{
-		while (command[i][++y])
-		{
-			ft_printf("i = %d, %s\n", i, command[i][y]);
-			// while (command[i][y][++z])
-			// {
-			// 	ft_printf("i : %d, y : %d, z : %d\n", i, y, z);
-			// }
-		}
-	}
+	(*command)[i] = NULL;
+
+	// // DEBUG //
+	// i = -1;
+	// while (commands[++i])
+	// {
+	// 	y = -1;
+	// 	while ((*command)[i][++y])
+	// 	{
+	// 		ft_printf("%s\n", (*command)[i][y]);
+	// 	}
+	// }
+	// // FIN DEBUG //
+
 	// if (!(*command = ft_strsplit(input, ' ')))
 	// 	return (0);
-	exit(0);
 	return (1);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+								//FIN PARSING
+////////////////////////////////////////////////////////////////////////////////
 
 /*
 **	A proteger!!!!!!
@@ -377,12 +501,13 @@ int			main(int ac, char **av, char **environ)
 {
 //	pid_t	father;
 	char	*line;
-	char	**command = NULL;
+	char	***command = NULL;
 	char	**env_paths;
 	t_list	*env;
 	t_list	*tmplst;
 	struct stat st;
 	int		i;
+	int		y;
 	int		status;
 //	int 	y;
 	char 	str[PATH_MAX + 1];
@@ -415,129 +540,138 @@ int			main(int ac, char **av, char **environ)
 		/*
 		**	PARSING
 		*/
-		if (!(minishell_parser(line/*, &command*/)))
-			continue;
-		/*
-		**	GESTION DES BULTINS
-		*/
-		if (ft_strcmp(command[0], "exit") == 0)
+		if (!(minishell_parser(line, &command)))
 		{
-			ft_printf("c'est ca degage\n");
-			if (command[1])
-				exit(ft_atoi(command[1]));
-			else
-				exit(EXIT_SUCCESS);
-		}
-		else if (ft_strcmp(command[0], "mypwd") == 0)
-		{
-			getcwd(str, PATH_MAX + 1);
-			ft_printf("pwd : %s\n", str);
+			ft_printf("%s\n", "Le parsing a fail");
 			continue;
 		}
-		else if (ft_strcmp(command[0], "cd") == 0)
+		y = -1;
+		while (command[++y])
 		{
-			char 	oldpwd[PATH_MAX + 1];
-			// recupere le pwd
-			getcwd(oldpwd, PATH_MAX + 1);
-			if ((chdir(command[1])) < 0)
-				ft_printf("chdir failed\n");
-			else
+			if (command[y][0] == NULL)
+				continue;
+			/*
+			**	GESTION DES BULTINS
+			*/
+			if (ft_strcmp(command[y][0], "exit") == 0)
 			{
-				if (!(change_env_var(&env, "OLDPWD", oldpwd)))
-					ft_printf("OLDPWD not found\n");
-				// PWD
-				char 	pwd[PATH_MAX + 1];
+				ft_printf("c'est ca degage\n");
+				if (command[y][1])
+					exit(ft_atoi(command[y][1]));
+				else
+					exit(EXIT_SUCCESS);
+			}
+			else if (ft_strcmp(command[y][0], "mypwd") == 0)
+			{
+				getcwd(str, PATH_MAX + 1);
+				ft_printf("pwd : %s\n", str);
+				continue;
+			}
+			else if (ft_strcmp(command[y][0], "cd") == 0)
+			{
+				char 	oldpwd[PATH_MAX + 1];
 				// recupere le pwd
-				getcwd(pwd, PATH_MAX + 1);
-				if (!(change_env_var(&env, "PWD", pwd)))
-					ft_printf("PWD not found\n");
-				ft_printf("... moving to %s ....\n", command[1]);
-			}
-			continue;
-		}
-		else if (ft_strcmp(command[0], "env") == 0)
-		{
-			ft_lstiter(env, print_lstenv);
-			continue;
-		}
-		else if (ft_strcmp(command[0], "setenv") == 0)
-		{
-			tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
-			tmplst->content = create_varenv(command[1], command[2]);
-			ft_lstaddend(&env, tmplst);
-			continue;
-		}
-		else if (ft_strcmp(command[0], "unsetenv") == 0)
-		{
-			remove_one(&env, command[1]);
-			continue;
-		}
-		else if (ft_strcmp(command[0], "echo") == 0)
-		{
-			// y = 0;
-			// while (command[1 + y])
-			// {
-			// 	ft_printf("%s", command[1 + y]);
-			// 	y++;
-			// 	if (command[1 + y])
-			// 		ft_printf(" ");
-			// }
-			if (command[1])
-			{
-				g_pid = fork();
-				if (g_pid == 0)
+				getcwd(oldpwd, PATH_MAX + 1);
+				if ((chdir(command[y][1])) < 0)
+					ft_printf("chdir failed\n");
+				else
 				{
-					echo(&line[4]);
-					//kill(g_pid, SIGTERM);
-				}
-				else if (g_pid < 0)
-					ft_printf("fail\n");
-				else if (g_pid > 0)
-				{
-					signal(SIGINT, catch_signal_kill);
-					waitpid(g_pid, &status, 0);
-				}
-				//echo(&line[4]);
-			}
-			ft_printf("\n");
-			continue;
-		}
-		/*
-		**	FIN DES BUILTINS
-		*/
-		// Recherche du fichier dans les repos du path
-		i = -1;
-		while (env_paths[++i])
-		{
-			// Si le fichier existe pas dans ce path, continue a boucler
-			if ((lstat(get_complete_path(env_paths[i], command[0]), &st)) < 0)
-			{
-				// Si c'etait le dernier -> pas trouve
-				if (!env_paths[i + 1])
-				{
-					ft_printf("minishell: command not found: %s\n", command[0]);
-					break;
+					if (!(change_env_var(&env, "OLDPWD", oldpwd)))
+						ft_printf("OLDPWD not found\n");
+					// PWD
+					char 	pwd[PATH_MAX + 1];
+					// recupere le pwd
+					getcwd(pwd, PATH_MAX + 1);
+					if (!(change_env_var(&env, "PWD", pwd)))
+						ft_printf("PWD not found\n");
+					ft_printf("... moving to %s ....\n", command[y][1]);
 				}
 				continue;
 			}
-			// Si le fichier est trouvé on l'execute
-			else
+			else if (ft_strcmp(command[y][0], "env") == 0)
 			{
-				ft_printf("tiens ton resultat de merde :\n");
-				g_pid = fork();
-				if (g_pid == 0)
+				ft_lstiter(env, print_lstenv);
+				continue;
+			}
+			else if (ft_strcmp(command[y][0], "setenv") == 0)
+			{
+				tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
+				tmplst->content = create_varenv(command[y][1], command[y][2]);
+				ft_lstaddend(&env, tmplst);
+				continue;
+			}
+			else if (ft_strcmp(command[y][0], "unsetenv") == 0)
+			{
+				remove_one(&env, command[y][1]);
+				continue;
+			}
+			else if (ft_strcmp(command[y][0], "echo") == 0)
+			{
+				// y = 0;
+				// while (command[1 + y])
+				// {
+				// 	ft_printf("%s", command[1 + y]);
+				// 	y++;
+				// 	if (command[1 + y])
+				// 		ft_printf(" ");
+				// }
+				if (command[y][1])
 				{
-					execve(get_complete_path(env_paths[i], command[0]), command, environ);
-					//kill(g_pid, SIGTERM);
+					g_pid = fork();
+					if (g_pid == 0)
+					{
+						echo(&line[4]);
+						//kill(g_pid, SIGTERM);
+					}
+					else if (g_pid < 0)
+						ft_printf("fail\n");
+					else if (g_pid > 0)
+					{
+						signal(SIGINT, catch_signal_kill);
+						waitpid(g_pid, &status, 0);
+					}
+					//echo(&line[4]);
 				}
-				else if (g_pid < 0)
-					ft_printf("fail\n");
-				else if (g_pid > 0)
+				ft_printf("\n");
+				continue;
+			}
+			/*
+			**	FIN DES BUILTINS
+			*/
+			// Recherche du fichier dans les repos du path
+			i = -1;
+			while (env_paths[++i])
+			{
+				// Si le fichier existe pas dans ce path, continue a boucler
+				if ((lstat(get_complete_path(env_paths[i], command[y][0]), &st)) < 0)
 				{
-					signal(SIGINT, catch_signal_kill);
-					waitpid(g_pid, &status, 0);
+					// Si c'etait le dernier -> pas trouve
+					if (!env_paths[i + 1])
+					{
+						ft_printf("minishell: command not found: %s\n", command[y][0]);
+						break;
+					}
+					continue;
 				}
-				break;
+				// Si le fichier est trouvé on l'execute
+				else
+				{
+					ft_printf("tiens ton resultat de merde :\n");
+					g_pid = fork();
+					if (g_pid == 0)
+					{
+						execve(get_complete_path(env_paths[i], command[y][0]), command[y], environ);
+						//kill(g_pid, SIGTERM);
+					}
+					else if (g_pid < 0)
+						ft_printf("fail\n");
+					else if (g_pid > 0)
+					{
+						signal(SIGINT, catch_signal_kill);
+						waitpid(g_pid, &status, 0);
+					}
+					break;
+				}
 			}
 		}
 		//ft_printf("tiens ton resultat de merde : %s\n", line);
