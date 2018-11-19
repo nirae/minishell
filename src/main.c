@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/16 19:36:46 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/19 20:22:42 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,95 +46,95 @@ void	error()
 ///////////////////////// ECHO ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-static int		echo(char *str)
-{
-	int i = -1;
-	int y = 0;
-	char *tmp;
-	char final_str[4096];
-	int nb_double_quotes = 0;
-	int nb_simple_quotes = 0;
-// 1 simple
-// 2 double
-	int first_quote = 0;
-	char *line;
-
-	//signal(SIGINT, catch_signal_echo);
-	final_str[0] = 0;
-	while (str[++i])
-	{
-		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
-		signal(SIGINT, catch_signal);
-		if (str[i] == ' ' && (nb_double_quotes % 2) == 0 && (nb_simple_quotes % 2) == 0)
-			continue;
-		else if (str[i] == '\"')
-		{
-			if (first_quote == 1 && (nb_simple_quotes % 2) != 0)
-			{
-				final_str[y] = str[i];
-				y++;
-				// if (str[i + 1] == ' ')
-				// {
-				// 	final_str[y] = ' ';
-				// 	y++;
-				// }
-			}
-			nb_double_quotes++;
-			if ((nb_simple_quotes % 2) == 0)
-				first_quote = 2;
-			//continue;
-		}
-		else if (str[i] == '\'')
-		{
-			if (first_quote == 2 && (nb_double_quotes % 2) != 0)
-			{
-				final_str[y] = str[i];
-				y++;
-				// if (str[i + 1] == ' ')
-				// {
-				// 	final_str[y] = ' ';
-				// 	y++;
-				// }
-			}
-			nb_simple_quotes++;
-			if ((nb_double_quotes % 2) == 0)
-				first_quote = 1;
-		//	continue;
-		}
-		else
-		{
-			final_str[y] = str[i];
-			y++;
-			if (str[i + 1] == ' ')
-			{
-				final_str[y] = ' ';
-				y++;
-			}
-		}
-		if (str[i + 1] == 0)
-		{
-			if (((nb_double_quotes % 2) != 0 && first_quote == 2) || ((nb_simple_quotes % 2) != 0 && first_quote == 1))
-			{
-				ft_printf("termine ta quote putain>");
-				line = NULL;
-				if (get_next_line(0, &line) < 0)
-					error();
-				if (!line[0])
-					line[0] = '\n';
-				tmp = str;
-				str = ft_strjoin(tmp, "\n");
-				tmp = str;
-				str = ft_strjoin(tmp, line);
-				ft_strdel(&line);
-			}
-		}
-		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
-	}
-	final_str[y] = '\0';
-	if (final_str[0])
-		ft_printf("%s", final_str);
-	exit(0);
-}
+// static int		echo(char *str)
+// {
+// 	int i = -1;
+// 	int y = 0;
+// 	char *tmp;
+// 	char final_str[4096];
+// 	int nb_double_quotes = 0;
+// 	int nb_simple_quotes = 0;
+// // 1 simple
+// // 2 double
+// 	int first_quote = 0;
+// 	char *line;
+//
+// 	//signal(SIGINT, catch_signal_echo);
+// 	final_str[0] = 0;
+// 	while (str[++i])
+// 	{
+// 		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
+// 		signal(SIGINT, catch_signal);
+// 		if (str[i] == ' ' && (nb_double_quotes % 2) == 0 && (nb_simple_quotes % 2) == 0)
+// 			continue;
+// 		else if (str[i] == '\"')
+// 		{
+// 			if (first_quote == 1 && (nb_simple_quotes % 2) != 0)
+// 			{
+// 				final_str[y] = str[i];
+// 				y++;
+// 				// if (str[i + 1] == ' ')
+// 				// {
+// 				// 	final_str[y] = ' ';
+// 				// 	y++;
+// 				// }
+// 			}
+// 			nb_double_quotes++;
+// 			if ((nb_simple_quotes % 2) == 0)
+// 				first_quote = 2;
+// 			//continue;
+// 		}
+// 		else if (str[i] == '\'')
+// 		{
+// 			if (first_quote == 2 && (nb_double_quotes % 2) != 0)
+// 			{
+// 				final_str[y] = str[i];
+// 				y++;
+// 				// if (str[i + 1] == ' ')
+// 				// {
+// 				// 	final_str[y] = ' ';
+// 				// 	y++;
+// 				// }
+// 			}
+// 			nb_simple_quotes++;
+// 			if ((nb_double_quotes % 2) == 0)
+// 				first_quote = 1;
+// 		//	continue;
+// 		}
+// 		else
+// 		{
+// 			final_str[y] = str[i];
+// 			y++;
+// 			if (str[i + 1] == ' ')
+// 			{
+// 				final_str[y] = ' ';
+// 				y++;
+// 			}
+// 		}
+// 		if (str[i + 1] == 0)
+// 		{
+// 			if (((nb_double_quotes % 2) != 0 && first_quote == 2) || ((nb_simple_quotes % 2) != 0 && first_quote == 1))
+// 			{
+// 				ft_printf("termine ta quote putain>");
+// 				line = NULL;
+// 				if (get_next_line(0, &line) < 0)
+// 					error();
+// 				if (!line[0])
+// 					line[0] = '\n';
+// 				tmp = str;
+// 				str = ft_strjoin(tmp, "\n");
+// 				tmp = str;
+// 				str = ft_strjoin(tmp, line);
+// 				ft_strdel(&line);
+// 			}
+// 		}
+// 		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
+// 	}
+// 	final_str[y] = '\0';
+// 	if (final_str[0])
+// 		ft_printf("%s", final_str);
+// 	exit(0);
+// }
 
 /////////////////////////////////////////////////////////////////////////////
 ///////////////////////// END ECHO ////////////////////////////////
@@ -224,18 +224,20 @@ char		**ft_strsplit_parser2(char *str)
 	while (str[++i])
 	{
 		//signal(SIGINT, catch_signal);
+		if (!(result[j] = ft_strnew(10000)))
+			return (0);
 		if (str[i] == ' ' || str[i] == '\t')
 			continue;
 		else if (str[i] == '\"')
 		{
-			if (!(result[j] = ft_strnew(10000)))
-				return (0);
+			// if (!(result[j] = ft_strnew(10000)))
+			// 	return (0);
 			y = 0;
 			while (str[i++])
 			{
 				if (str[i] == '\"')
 				{
-					j++;
+					//j++;
 					break;
 				}
 				result[j][y] = str[i];
@@ -257,34 +259,47 @@ char		**ft_strsplit_parser2(char *str)
 				}
 			}
 		}
-		if (!(result[j] = ft_strnew(10000)))
-			return (0);
+		else if (str[i] == '\'')
+		{
+			// if (!(result[j] = ft_strnew(10000)))
+			// 	return (0);
+			y = 0;
+			while (str[i++])
+			{
+				if (str[i] == '\'')
+				{
+					//j++;
+					break;
+				}
+				result[j][y] = str[i];
+				y++;
+				if (str[i + 1] == 0)
+				{
+					ft_printf("termine ta quote putain> ");
+					line = NULL;
+					if (get_next_line(0, &line) < 0)
+						error();
+					if (!line[0])
+						line[0] = '\n';
+					tmp = str;
+					str = ft_strjoin(tmp, "\n");
+					tmp = str;
+					str = ft_strjoin(tmp, line);
+					ft_strdel(&line);
+					continue;
+				}
+			}
+		}
+		// if (!(result[j] = ft_strnew(10000)))
+		// 	return (0);
 		y = 0;
-		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"')
+		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'')
 		{
 			result[j][y] = str[i];
 			y++;
 			i++;
 		}
 		j++;
-		// else if (str[i] == '\'')
-		// {
-		// 	if (first_quote == 2 && (nb_double_quotes % 2) != 0)
-		// 	{
-		// 		final_str[y] = str[i];
-		// 		y++;
-		// 		// if (str[i + 1] == ' ')
-		// 		// {
-		// 		// 	final_str[y] = ' ';
-		// 		// 	y++;
-		// 		// }
-		// 	}
-		// 	nb_simple_quotes++;
-		// 	if ((nb_double_quotes % 2) == 0)
-		// 		first_quote = 1;
-		// //	continue;
-		// }
-		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
 	}
 	return (result);
 }
@@ -311,12 +326,14 @@ int		minishell_parser(char *input, char ****command)
 
 	// // DEBUG //
 	// i = -1;
+	// int y;
+	// ft_printf("DEBUG:\n");
 	// while (commands[++i])
 	// {
 	// 	y = -1;
 	// 	while ((*command)[i][++y])
 	// 	{
-	// 		ft_printf("%s\n", (*command)[i][y]);
+	// 		ft_printf("commande %d = %s\n", y, (*command)[i][y]);
 	// 	}
 	// }
 	// // FIN DEBUG //
@@ -537,6 +554,7 @@ int			main(int ac, char **av, char **environ)
 		line = NULL;
 		if (get_next_line(0, &line) < 0)
 			error();
+		//ft_printf("line = %s\n", line);
 		/*
 		**	PARSING
 		*/
@@ -545,6 +563,7 @@ int			main(int ac, char **av, char **environ)
 			ft_printf("%s\n", "Le parsing a fail");
 			continue;
 		}
+		ft_strdel(&line);
 		y = -1;
 		while (command[++y])
 		{
@@ -607,31 +626,31 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "echo") == 0)
 			{
-				// y = 0;
-				// while (command[1 + y])
-				// {
-				// 	ft_printf("%s", command[1 + y]);
-				// 	y++;
-				// 	if (command[1 + y])
-				// 		ft_printf(" ");
-				// }
-				if (command[y][1])
+				int z = 0;
+				while (command[y][1 + z])
 				{
-					g_pid = fork();
-					if (g_pid == 0)
-					{
-						echo(&line[4]);
-						//kill(g_pid, SIGTERM);
-					}
-					else if (g_pid < 0)
-						ft_printf("fail\n");
-					else if (g_pid > 0)
-					{
-						signal(SIGINT, catch_signal_kill);
-						waitpid(g_pid, &status, 0);
-					}
-					//echo(&line[4]);
+					ft_printf("%s", command[y][1 + z]);
+					z++;
+					if (command[y][1 + z])
+						ft_printf(" ");
 				}
+				// if (command[y][1])
+				// {
+				// 	g_pid = fork();
+				// 	if (g_pid == 0)
+				// 	{
+				// 		echo(&line[4]);
+				// 		//kill(g_pid, SIGTERM);
+				// 	}
+				// 	else if (g_pid < 0)
+				// 		ft_printf("fail\n");
+				// 	else if (g_pid > 0)
+				// 	{
+				// 		signal(SIGINT, catch_signal_kill);
+				// 		waitpid(g_pid, &status, 0);
+				// 	}
+				// 	//echo(&line[4]);
+				//}
 				ft_printf("\n");
 				continue;
 			}
@@ -675,7 +694,7 @@ int			main(int ac, char **av, char **environ)
 			}
 		}
 		//ft_printf("tiens ton resultat de merde : %s\n", line);
-		ft_strdel(&line);
+
 	}
 	return (0);
 }
