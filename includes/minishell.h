@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/08 10:10:25 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/21 16:09:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@
 # include <signal.h>
 # include <sys/stat.h>
 # include <limits.h>
+# include <fcntl.h>
 
 # define PROMPT "tape ta commande connard > "
 
 # define HASH_TAB_MAX	4096
+
 
 pid_t				g_pid;
 
@@ -39,5 +41,7 @@ typedef struct		s_varenv
 	char			*name;
 	char			*content;
 }					t_varenv;
+
+int					read_prompt(const int fd, char **line, int option);
 
 #endif

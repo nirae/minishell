@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/19 20:22:42 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/21 19:41:40 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -552,9 +552,11 @@ int			main(int ac, char **av, char **environ)
 		ft_printf("\n%s", PROMPT);
 		// Lis l'entree standard
 		line = NULL;
-		if (get_next_line(0, &line) < 0)
+		// if (get_next_line(0, &line) < 0)
+		if (read_prompt(0, &line, 0) < 0)
 			error();
-		//ft_printf("line = %s\n", line);
+		// debug
+		ft_printf("line = %s\n", line);
 		/*
 		**	PARSING
 		*/
@@ -564,6 +566,9 @@ int			main(int ac, char **av, char **environ)
 			continue;
 		}
 		ft_strdel(&line);
+		// read_prompt(0, &line, 1);
+		// ft_printf("reste du buffer : %s\n", line);
+	 	// ft_strdel(&line);
 		y = -1;
 		while (command[++y])
 		{

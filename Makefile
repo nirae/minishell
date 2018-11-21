@@ -6,14 +6,13 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/11/16 18:52:29 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/11/20 16:26:53 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Binaries and Flags
 
 CC		=	/usr/bin/gcc
-AR		=	/usr/bin/ar
 RM		=	/bin/rm
 CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
@@ -28,7 +27,7 @@ SRC		=	./src/
 
 HFILES	=	$(H)minishell.h
 MAIN	=	$(SRC)main.c
-#SRCS	=	$(MAIN)
+SRCS	=	$(SRC)read_prompt.c
 
 OBJ		=	$(patsubst %.c,%.o,$(SRCS))
 # Name
