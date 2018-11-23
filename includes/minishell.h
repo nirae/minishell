@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/21 16:09:28 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/22 15:39:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 
 
 pid_t				g_pid;
+t_list				*g_env_lst;
+char				**g_env_tab;
 
 typedef struct		s_command
 {
@@ -42,6 +44,6 @@ typedef struct		s_varenv
 	char			*content;
 }					t_varenv;
 
-int					read_prompt(const int fd, char **line, int option);
+int					read_prompt(const int fd, char **line);
 
 #endif

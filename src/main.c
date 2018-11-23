@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/21 19:41:40 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/23 23:58:27 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,6 +387,7 @@ void		create_my_env(t_list **lst, char **environ)
 	int		i;
 	t_list	*tmplst;
 	char	**env;
+	int		pos;
 
 	i = 0;
 	while (environ[i])
@@ -395,14 +396,54 @@ void		create_my_env(t_list **lst, char **environ)
 		if (!(tmplst = ft_lstnew(NULL, sizeof(t_varenv *))))
 			ft_printf("lstnew a foire\n");
 		if (!(env = ft_strsplit(environ[i], '=')))
-			ft_printf("strsplit a foire\n");
-		tmplst->content = create_varenv(env[0], env[1]);
+		 	ft_printf("strsplit a foire\n");
+		pos = ft_strpos(environ[i], '=');
+		// tmplst->content = create_varenv(env[0], env[1]);
+		tmplst->content = create_varenv(env[0], &environ[i][pos + 1]);
 		if (!(*lst))
 			*lst = tmplst;
 		else
 			ft_lstadd(lst, tmplst);
 		ft_memdel((void **)&env);
 		i++;
+	}
+}
+
+void		env_lst_to_tab(t_list **lst, char ***tab)
+{
+	int		i;
+	char	*tmp;
+	t_list	*node;
+
+	if (*tab != NULL)
+	{
+		i = 0;
+		while((*tab)[i++])
+			ft_strdel(&(*tab)[i]);
+		*tab = NULL;
+	}
+	node = *lst;
+	if (*tab == NULL)
+		if (!(*tab = (char **)ft_memalloc(sizeof(char *) * (ft_lstlen(*lst) + 1))))
+			return;
+	if (node != NULL)
+	{
+		i = 0;
+		while (node)
+		{
+			if (!((*tab)[i] = ft_strjoin(((t_varenv *)((node)->content))->name, "=")))
+				ft_printf("strjoin fail\n");
+			if (((t_varenv *)((node)->content))->content)
+			{
+				tmp = (*tab)[i];
+				if (!((*tab)[i] = ft_strjoin((*tab)[i], ((t_varenv *)((node)->content))->content)))
+					ft_printf("strjoin fail\n");
+				ft_strdel(&tmp);
+			}
+			(node) = (node)->next;
+			i++;
+		}
+		(*tab)[i] = NULL;
 	}
 }
 
@@ -520,7 +561,7 @@ int			main(int ac, char **av, char **environ)
 	char	*line;
 	char	***command = NULL;
 	char	**env_paths;
-	t_list	*env;
+	//t_list	*env;
 	t_list	*tmplst;
 	struct stat st;
 	int		i;
@@ -536,11 +577,14 @@ int			main(int ac, char **av, char **environ)
 
 	(void)ac;
 	(void)av;
-	env = NULL;
+	g_env_lst = NULL;
+	g_env_tab = NULL;
+	ft_printf("%s", environ[0]);
 	// copie de environ
-	create_my_env(&env, environ);
+	create_my_env(&g_env_lst, environ);
 	//ft_lstiter(env, print_lstenv);
-	env_paths = get_env_paths(env);
+	env_paths = get_env_paths(g_env_lst);
+	env_lst_to_tab(&g_env_lst, &g_env_tab);
 	/*
 	** Boucle infinie du programme
 	*/
@@ -553,10 +597,8 @@ int			main(int ac, char **av, char **environ)
 		// Lis l'entree standard
 		line = NULL;
 		// if (get_next_line(0, &line) < 0)
-		if (read_prompt(0, &line, 0) < 0)
+		if (read_prompt(0, &line) < 0)
 			error();
-		// debug
-		ft_printf("line = %s\n", line);
 		/*
 		**	PARSING
 		*/
@@ -600,13 +642,13 @@ int			main(int ac, char **av, char **environ)
 					ft_printf("chdir failed\n");
 				else
 				{
-					if (!(change_env_var(&env, "OLDPWD", oldpwd)))
+					if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
 						ft_printf("OLDPWD not found\n");
 					// PWD
 					char 	pwd[PATH_MAX + 1];
 					// recupere le pwd
 					getcwd(pwd, PATH_MAX + 1);
-					if (!(change_env_var(&env, "PWD", pwd)))
+					if (!(change_env_var(&g_env_lst, "PWD", pwd)))
 						ft_printf("PWD not found\n");
 					ft_printf("... moving to %s ....\n", command[y][1]);
 				}
@@ -614,19 +656,27 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "env") == 0)
 			{
-				ft_lstiter(env, print_lstenv);
+				//ft_lstiter(g_env_lst, print_lstenv);
+				int i = 0;
+				while (g_env_tab[i])
+				{
+					ft_printf("%s\n", g_env_tab[i]);
+					i++;
+				}
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "setenv") == 0)
 			{
 				tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
 				tmplst->content = create_varenv(command[y][1], command[y][2]);
-				ft_lstaddend(&env, tmplst);
+				ft_lstaddend(&g_env_lst, tmplst);
+				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "unsetenv") == 0)
 			{
-				remove_one(&env, command[y][1]);
+				remove_one(&g_env_lst, command[y][1]);
+				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "echo") == 0)
@@ -684,7 +734,7 @@ int			main(int ac, char **av, char **environ)
 					g_pid = fork();
 					if (g_pid == 0)
 					{
-						execve(get_complete_path(env_paths[i], command[y][0]), command[y], environ);
+						execve(get_complete_path(env_paths[i], command[y][0]), command[y], g_env_tab);
 						//kill(g_pid, SIGTERM);
 					}
 					else if (g_pid < 0)
