@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/23 23:58:27 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/27 19:33:05 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,40 +171,6 @@ static char	*get_complete_path(char *parent, char *name)
 								//PARSING
 ////////////////////////////////////////////////////////////////////////////////
 
-// char		**ft_strsplit_parser(char const *s)
-// {
-// 	char	**tab;
-// 	int		i;
-// 	int		j;
-// 	int		k;
-//
-// 	if (s == NULL)
-// 		return (NULL);
-// 	if (!(tab = ft_memalloc(100000000)))
-// 		return (0);
-// 	i = -1;
-// 	j = 0;
-// 	while (s[++i])
-// 	{
-// 		k = 0;
-// 		if (j == 0)
-// 			if (!(tab[j] = ft_strnew(10000)))
-// 				return (0);
-// 		if (s[i] == "\"")
-// 		{
-// 			i++;
-//
-// 		}
-// 		while (s[i] == ' ' || s[i] == '\t')
-// 			i++;
-// 		while (s[j] != ' ' && s[j] != '\0')
-// 			tab[i][k++] = s[j++];
-// 		tab[i][k] = '\0';
-// 	}
-// 	tab[i] = 0;
-// 	return (tab);
-// }
-
 char		**ft_strsplit_parser2(char *str)
 {
 	int		i;
@@ -246,7 +212,7 @@ char		**ft_strsplit_parser2(char *str)
 				{
 					ft_printf("termine ta quote putain>");
 					line = NULL;
-					if (get_next_line(0, &line) < 0)
+					if (read_prompt(0, &line) < 0)
 						error();
 					if (!line[0])
 						line[0] = '\n';
@@ -277,7 +243,7 @@ char		**ft_strsplit_parser2(char *str)
 				{
 					ft_printf("termine ta quote putain> ");
 					line = NULL;
-					if (get_next_line(0, &line) < 0)
+					if (read_prompt(0, &line) < 0)
 						error();
 					if (!line[0])
 						line[0] = '\n';
@@ -304,44 +270,44 @@ char		**ft_strsplit_parser2(char *str)
 	return (result);
 }
 
-int		minishell_parser(char *input, char ****command)
-{
-	int		i;
-	char	**commands;
-
-	*command = ft_memalloc((ft_strlen(input) + 1) * 8);
-
-	if (input[0] == 0)
-		return (FALSE);
-	if (!(commands = ft_strsplit(input, ';')))
-		return (FALSE);
-	i = -1;
-	while (commands[++i])
-	{
-		// if (!((*command)[i] = ft_strsplit(commands[i], ' ')))
-		if (!((*command)[i] = ft_strsplit_parser2(commands[i])))
-			return (FALSE);
-	}
-	(*command)[i] = NULL;
-
-	// // DEBUG //
-	// i = -1;
-	// int y;
-	// ft_printf("DEBUG:\n");
-	// while (commands[++i])
-	// {
-	// 	y = -1;
-	// 	while ((*command)[i][++y])
-	// 	{
-	// 		ft_printf("commande %d = %s\n", y, (*command)[i][y]);
-	// 	}
-	// }
-	// // FIN DEBUG //
-
-	// if (!(*command = ft_strsplit(input, ' ')))
-	// 	return (0);
-	return (1);
-}
+// int		minishell_parser(char *input, char ****command)
+// {
+// 	int		i;
+// 	char	**commands;
+//
+// 	*command = ft_memalloc((ft_strlen(input) + 1) * 8);
+//
+// 	if (input[0] == 0)
+// 		return (FALSE);
+// 	if (!(commands = ft_strsplit(input, ';')))
+// 		return (FALSE);
+// 	i = -1;
+// 	while (commands[++i])
+// 	{
+// 		// if (!((*command)[i] = ft_strsplit(commands[i], ' ')))
+// 		if (!((*command)[i] = ft_strsplit_parser2(commands[i])))
+// 			return (FALSE);
+// 	}
+// 	(*command)[i] = NULL;
+//
+// 	// // DEBUG //
+// 	// i = -1;
+// 	// int y;
+// 	// ft_printf("DEBUG:\n");
+// 	// while (commands[++i])
+// 	// {
+// 	// 	y = -1;
+// 	// 	while ((*command)[i][++y])
+// 	// 	{
+// 	// 		ft_printf("commande %d = %s\n", y, (*command)[i][y]);
+// 	// 	}
+// 	// }
+// 	// // FIN DEBUG //
+//
+// 	// if (!(*command = ft_strsplit(input, ' ')))
+// 	// 	return (0);
+// 	return (1);
+// }
 
 ////////////////////////////////////////////////////////////////////////////////
 								//FIN PARSING
@@ -389,6 +355,14 @@ void		create_my_env(t_list **lst, char **environ)
 	char	**env;
 	int		pos;
 
+	if (environ[0] == NULL)
+	{
+		if (!(tmplst = ft_lstnew(NULL, sizeof(t_varenv *))))
+			ft_printf("lstnew a foire\n");
+		tmplst->content = create_varenv("SHELL", "minishell");
+		*lst = tmplst;
+		return;
+	}
 	i = 0;
 	while (environ[i])
 	{
@@ -558,7 +532,7 @@ void		print_lstenv(t_list *lst)
 int			main(int ac, char **av, char **environ)
 {
 //	pid_t	father;
-	char	*line;
+	char	*strrr;
 	char	***command = NULL;
 	char	**env_paths;
 	//t_list	*env;
@@ -579,7 +553,6 @@ int			main(int ac, char **av, char **environ)
 	(void)av;
 	g_env_lst = NULL;
 	g_env_tab = NULL;
-	ft_printf("%s", environ[0]);
 	// copie de environ
 	create_my_env(&g_env_lst, environ);
 	//ft_lstiter(env, print_lstenv);
@@ -595,19 +568,21 @@ int			main(int ac, char **av, char **environ)
 		// Affiche le prompt
 		ft_printf("\n%s", PROMPT);
 		// Lis l'entree standard
-		line = NULL;
+		// line = NULL;
 		// if (get_next_line(0, &line) < 0)
-		if (read_prompt(0, &line) < 0)
-			error();
+		// if (read_prompt(0, &line) < 0)
+		// 	error();
+		get_complete_command(&strrr);
+		//ft_printf("commande = %s\n", strrr);
 		/*
 		**	PARSING
 		*/
-		if (!(minishell_parser(line, &command)))
+		if (!(minishell_parser(strrr, &command)))
 		{
 			ft_printf("%s\n", "Le parsing a fail");
 			continue;
 		}
-		ft_strdel(&line);
+		// ft_strdel(&line);
 		// read_prompt(0, &line, 1);
 		// ft_printf("reste du buffer : %s\n", line);
 	 	// ft_strdel(&line);

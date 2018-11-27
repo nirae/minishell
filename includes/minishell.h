@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/22 15:39:28 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/27 17:11:26 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ typedef struct		s_varenv
 }					t_varenv;
 
 int					read_prompt(const int fd, char **line);
+int					get_complete_command(char **str);
+char		**minishell_split(char *str);
+int		minishell_parser(char *input, char ****command);
 
 #endif
