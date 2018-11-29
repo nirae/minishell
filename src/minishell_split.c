@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 15:19:02 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/28 17:47:31 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/29 16:13:05 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	count_commands(char *str)
 	{
 		if (escape)
 			escape = FALSE;
-		if (str[i] == '\\')
+		if (str[i] == '\\' && str[i + 1])
 		{
 			escape = TRUE;
 			i++;
@@ -51,7 +51,7 @@ static int	get_size_of_next_command(char *str)
 
 	while (str[++i])
 	{
-		if (str[i] == '\\')
+		if (str[i] == '\\' && str[i + 1])
 		{
 			escape = TRUE;
 			i++;
@@ -88,6 +88,7 @@ static int	get_size_of_next_command(char *str)
 			y++;
 			i++;
 		}
+		return (y);
 	}
 	return (y);
 }

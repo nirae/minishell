@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/27 18:25:20 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/11/29 19:00:56 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int			get_complete_command(char **str)
 
 	if (read_prompt(0, &line) < 0)
 		return (0);
+		// exit(0);
 	// a proteger
 	final_str = ft_strdup(line);
 	ft_strdel(&line);
@@ -31,7 +32,7 @@ int			get_complete_command(char **str)
 	{
 		if (escape)
 			escape = FALSE;
-		if (final_str[i] == '\\')
+		if (final_str[i] == '\\' && final_str[i + 1])
 		{
 			escape = TRUE;
 			i++;
@@ -57,6 +58,7 @@ int			get_complete_command(char **str)
 					line = NULL;
 					if (read_prompt(0, &line) < 0)
 						return (0);
+						// exit(0);
 					tmp = final_str;
 					final_str = ft_strjoin(tmp, "\n");
 					ft_strdel(&tmp);
@@ -87,6 +89,7 @@ int			get_complete_command(char **str)
 					line = NULL;
 					if (read_prompt(0, &line) < 0)
 						return (0);
+						// exit(0);
 					tmp = final_str;
 					final_str = ft_strjoin(tmp, "\n");
 					ft_strdel(&tmp);
@@ -102,4 +105,5 @@ int			get_complete_command(char **str)
 	// a proteger
 	*str = ft_strdup(final_str);
 	return (1);
+	// exit(1);
 }
