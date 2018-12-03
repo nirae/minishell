@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/11/27 17:10:45 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/03 15:32:03 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ MAIN	=	$(SRC)main.c
 SRCS	=	$(SRC)read_prompt.c												\
 			$(SRC)get_complete_command.c									\
 			$(SRC)minishell_split.c											\
-			$(SRC)minishell_parser.c
+			$(SRC)minishell_parser.c										\
+			$(SRC)ft_split_escape.c
 
 OBJ		=	$(patsubst %.c,%.o,$(SRCS))
 # Name
