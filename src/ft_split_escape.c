@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/03 14:10:36 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/03 21:17:51 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/04 14:11:32 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,27 @@ static int	ft_count_words_escape(char *str, char sep)
 		{
 			escape = TRUE;
 			i++;
+			if (str[i] == '\\' && str[i + 1])
+			{
+				escape = FALSE;
+				i++;
+			}
 		}
 		while (str[i] == sep && !escape)
 		{
 			i++;
-			//j++;
-			//continue;
+			if (str[i] == '\\' && str[i + 1])
+			{
+				escape = TRUE;
+				i++;
+			}
 		}
-		while (str[i] != sep && str[i] && str[i] != '\\')
+		while ((str[i] != sep || escape) && str[i] && str[i] != '\\')
+		{
 			i++;
+			if (escape)
+				escape = FALSE;
+		}
 		if ((str[i] == sep && !escape) || !str[i])
 		{
 			j++;

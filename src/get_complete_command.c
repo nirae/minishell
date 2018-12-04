@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/29 19:00:56 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/04 18:45:22 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ int			get_complete_command(char **str)
 		}
 		if ((final_str[i] == ' ' || final_str[i] == '\t') && !escape)
 			continue;
+		else if (final_str[i] = '$')
+		{
+			
+		}
 		else if (final_str[i] == '\"' && !escape)
 		{
 			while (final_str[i++])
