@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/29 19:01:13 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/05 16:19:10 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,6 +490,21 @@ int			remove_one(t_list **lst, char *name)
 	}
 	return (0);
 }
+
+// t_varenv		*get_env_var_by_name(char *name)
+// {
+// 	t_list	*tmp;
+//
+//
+// 	tmp = g_env_lst;
+// 	while(tmp)
+// 	{
+// 		if (ft_strcmp(((t_varenv *)(tmp->content))->name, name) == 0)
+// 			return (((t_varenv *)(tmp->content)));
+// 		tmp = tmp->next;
+// 	}
+// 	return (NULL);
+// }
 
 void		print_lstenv(t_list *lst)
 {
