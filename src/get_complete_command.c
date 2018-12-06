@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/05 18:31:56 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/06 18:09:03 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ char		*one_more_split(char *s)
 	i = 0;
 	j = 0;
 	if (!(result = ft_strnew(ft_count_letterssss(s) + 1)))
-		return (0);
-	while (s[i] == ' ')
-		i++;
-	while (s[i] != ' ' && s[i] != '$' && s[i])
+		return (NULL);
+	if (s[i] == ' ' || !s[i] || s[i] == '\n'|| s[i] == '\t')
+		return (NULL);
+	while (s[i] != ' ' && (s[i] != '$' || s[i - 1] == '$') && s[i])
 		result[j++] = s[i++];
 	result[j] = '\0';
 	return (result);
@@ -97,7 +97,8 @@ int			get_complete_command(char **str)
 			t_varenv *myenvvar;
 
 			// a proteger
-			var = one_more_split(&final_str[i + 1]);
+			if (!(var = one_more_split(&final_str[i + 1])))
+				continue;
 			final_str[i] = '\0';
 			debut = ft_strdup(final_str);
 			final_str[i] = '$';
