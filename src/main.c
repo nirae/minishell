@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/05 16:19:10 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/07 19:06:37 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -657,16 +657,21 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "setenv") == 0)
 			{
-				tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
-				tmplst->content = create_varenv(command[y][1], command[y][2]);
-				ft_lstaddend(&g_env_lst, tmplst);
-				env_lst_to_tab(&g_env_lst, &g_env_tab);
+				if (command[y][1])
+				{
+					tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
+					tmplst->content = create_varenv(command[y][1], command[y][2]);
+					ft_lstaddend(&g_env_lst, tmplst);
+					env_lst_to_tab(&g_env_lst, &g_env_tab);
+					env_paths = get_env_paths(g_env_lst);
+				}
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "unsetenv") == 0)
 			{
 				remove_one(&g_env_lst, command[y][1]);
 				env_lst_to_tab(&g_env_lst, &g_env_tab);
+				env_paths = get_env_paths(g_env_lst);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "echo") == 0)
@@ -704,6 +709,11 @@ int			main(int ac, char **av, char **environ)
 			*/
 			// Recherche du fichier dans les repos du path
 			i = -1;
+			if (!env_paths)
+			{
+				ft_printf("pas de variable PATH");
+				continue;
+			}
 			while (env_paths[++i])
 			{
 				// Si le fichier existe pas dans ce path, continue a boucler

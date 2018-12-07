@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 15:19:02 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/29 16:13:05 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/07 18:34:48 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static int	count_commands(char *str)
 		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'' && str[i] != '\\')
 			i++;
 		j++;
+		if (!str[i])
+			break;
 	}
 	return (j);
 }
@@ -104,7 +106,7 @@ char		**minishell_split(char *str)
 
 	if (str == NULL)
 		return (NULL);
-	if (!(result = ft_memalloc((count_commands(str) + 1) * sizeof(char *))))
+	if (!(result = ft_memalloc((count_commands(str) + 1) * sizeof(char *) * 10)))
 		return (0);
 	i = -1;
 	j = 0;
