@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/07 19:06:37 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/09 18:43:04 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,12 @@ static char	*get_complete_path(char *parent, char *name)
 
 	if (name[0] == '/' || name[0] == '.')
 		return (name);
+	if (parent == NULL)
+	{
+		if (!(result = ft_strjoin("./", name)))
+			error();
+		return (result);
+	}
 	if (parent[ft_strlen(parent) - 1] == '/')
 	{
 		if (!(tmp = ft_strdup(parent)))
@@ -553,9 +559,11 @@ int			main(int ac, char **av, char **environ)
 	//t_list	*env;
 	t_list	*tmplst;
 	struct stat st;
+	struct stat stg;
 	int		i;
 	int		y;
 	int		status;
+	int		ret;
 //	int 	y;
 	char 	str[PATH_MAX + 1];
 
@@ -606,6 +614,9 @@ int			main(int ac, char **av, char **environ)
 		{
 			if (command[y][0] == NULL)
 				continue;
+			/*
+			**	FIN ERREURS
+			*/
 			/*
 			**	GESTION DES BULTINS
 			*/
@@ -714,13 +725,16 @@ int			main(int ac, char **av, char **environ)
 				ft_printf("pas de variable PATH");
 				continue;
 			}
+			// stat du nom
+			lstat(get_complete_path(NULL, command[y][0]), &stg);
 			while (env_paths[++i])
 			{
+				ret = lstat(get_complete_path(env_paths[i], command[y][0]), &st);
 				// Si le fichier existe pas dans ce path, continue a boucler
-				if ((lstat(get_complete_path(env_paths[i], command[y][0]), &st)) < 0)
+				if (ret < 0)
 				{
 					// Si c'etait le dernier -> pas trouve
-					if (!env_paths[i + 1])
+					if (!env_paths[i + 1] && !S_ISDIR(stg.st_mode))
 					{
 						ft_printf("minishell: command not found: %s\n", command[y][0]);
 						break;
@@ -728,7 +742,7 @@ int			main(int ac, char **av, char **environ)
 					continue;
 				}
 				// Si le fichier est trouvé on l'execute
-				else
+				else if (ret == 0 && !S_ISDIR(st.st_mode))
 				{
 					ft_printf("tiens ton resultat de merde :\n");
 					g_pid = fork();
@@ -747,6 +761,9 @@ int			main(int ac, char **av, char **environ)
 					break;
 				}
 			}
+			// ERREURS
+			if (S_ISDIR(stg.st_mode) && ret < 0)
+				ft_printf("minishell: %s is a directory\n", command[y][0]);
 		}
 		//ft_printf("tiens ton resultat de merde : %s\n", line);
 

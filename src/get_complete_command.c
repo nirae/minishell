@@ -6,26 +6,11 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/06 18:09:03 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/09 20:01:34 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_varenv		*get_env_var_by_name(char *name)
-{
-	t_list	*tmp;
-
-
-	tmp = g_env_lst;
-	while(tmp)
-	{
-		if (ft_strcmp(((t_varenv *)(tmp->content))->name, name) == 0)
-			return (((t_varenv *)(tmp->content)));
-		tmp = tmp->next;
-	}
-	return (NULL);
-}
 
 static int	ft_count_letterssss(char *str)
 {
