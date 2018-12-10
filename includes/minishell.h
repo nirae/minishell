@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/09 20:45:19 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/10 16:48:34 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 # define FAIL_MALLOC	2
 # define FAIL_ 			3
 
+# define SIMPLE_QUOTE 45
+# define DOUBLE_QUOTE 46
+
 
 pid_t				g_pid;
 t_list				*g_env_lst;
@@ -51,7 +54,7 @@ typedef struct		s_varenv
 
 int					read_prompt(const int fd, char **line);
 int					get_complete_command(char **str);
-char 				**ft_split_escape(char *str, char sep);
+// char 				**ft_split_escape(char *str, char sep);
 
 /*
 **	PARSING
@@ -60,6 +63,10 @@ char 				**ft_split_escape(char *str, char sep);
 int					minishell_parser(char *input, char ****command);
 char				**minishell_split(char *str);
 
+//char		**ft_split_escape(char *str, char sep);
+int					ft_count_words_escape(char *str, char sep);
+int 	ft_count_letters_escape(char *str, char sep);
+char		**ft_strsplit_with_escape(char *str, char sep);
 
 /*
 **	ENVIRONMENT

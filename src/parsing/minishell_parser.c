@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/09 21:00:36 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/10 19:44:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ int		minishell_parser(char *input, char ****commands_tab)
 	*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *));
 	if (!input[0])
 		return (TRUE);
-	if (!(separated_commands = ft_strsplit(input, ';')))
+	// ft_printf("count words escape = %d\n", ft_count_words_escape(input, ';'));
+	if (!(separated_commands = ft_strsplit_with_escape(input, ';')))
 		return (FAIL_);
 	if (!(split_each_commands(separated_commands, commands_tab)))
 		return (FAIL_);
@@ -73,17 +74,17 @@ int		minishell_parser(char *input, char ****commands_tab)
 	/*
 	** DEBUG
 	*/
-	// i = -1;
-	// int y;
-	// ft_printf("DEBUG:\n");
-	// while (commands[++i])
-	// {
-	// 	y = -1;
-	// 	while ((*command)[i][++y])
-	// 	{
-	// 		ft_printf("commande %d = %s\n", y, (*command)[i][y]);
-	// 	}
-	// }
+	int i = -1;
+	int y;
+	ft_printf("DEBUG:\n");
+	while (separated_commands[++i])
+	{
+		y = -1;
+		while ((*commands_tab)[i][++y])
+		{
+			ft_printf("commande %d, arg %d = %s\n", i, y, (*commands_tab)[i][y]);
+		}
+	}
 	/*
 	** FIN DEBUG
 	*/

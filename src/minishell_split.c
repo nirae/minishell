@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 15:19:02 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/07 18:34:48 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/10 20:44:59 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	count_commands(char *str)
 	{
 		if (escape)
 			escape = FALSE;
+		// (escape) ? escape = FALSE : 0;
 		if (str[i] == '\\' && str[i + 1])
 		{
 			escape = TRUE;
@@ -33,11 +34,11 @@ static int	count_commands(char *str)
 		if ((str[i] == ' ' || str[i] == '\t') && !escape)
 			continue;
 		else if (str[i] == '\"' && !escape)
-			while (str[i++] && str[i] != '\"');
+			while (str[i] && str[i++] != '\"');
 		else if (str[i] == '\'' && !escape)
-			while (str[i++] && str[i] != '\'');
-		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'' && str[i] != '\\')
-			i++;
+			while (str[i] && str[i++] != '\'');
+		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'' && str[i++] != '\\');
+			// i++;
 		j++;
 		if (!str[i])
 			break;
@@ -47,10 +48,11 @@ static int	count_commands(char *str)
 
 static int	get_size_of_next_command(char *str)
 {
-	int i = -1;
-	int y = 0;
-	int escape = FALSE;
+	int		i = -1;
+	int		y = 0;
+	int		escape;
 
+	escape = FALSE;
 	while (str[++i])
 	{
 		if (str[i] == '\\' && str[i + 1])
@@ -106,7 +108,8 @@ char		**minishell_split(char *str)
 
 	if (str == NULL)
 		return (NULL);
-	if (!(result = ft_memalloc((count_commands(str) + 1) * sizeof(char *) * 10)))
+	// ft_printf("nb = %d\n", count_commands(str));
+	if (!(result = ft_memalloc((count_commands(str) + 2) * sizeof(char *))))
 		return (0);
 	i = -1;
 	j = 0;
@@ -114,13 +117,15 @@ char		**minishell_split(char *str)
 	//ft_printf("nb commands = %d\n", count_commands(str));
 	while (str[++i])
 	{
+		// ft_printf("au debut : [%c], suivant : [%c]\n", str[i], str[i + 1]);
 		if (escape)
 			escape = FALSE;
 		// ft_printf("taille: %d\n", get_size_of_next_command(&str[i]));
 		if (!(result[j] = ft_strnew((get_size_of_next_command(&str[i]) + 1) * sizeof(char))))
 			return (0);
-		if (str[i] == '\\')
+		if (str[i] == '\\' && str[i + 1])
 		{
+			// ft_printf("dans escape [%c]\n", str[i]);
 			escape = TRUE;
 			i++;
 		}
@@ -150,6 +155,7 @@ char		**minishell_split(char *str)
 		}
 		y = 0;
 		while (((str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'' && str[i] != '\\') || escape) && str[i])
+		// while (str[i])
 		{
 			if (escape)
 				escape = FALSE;
