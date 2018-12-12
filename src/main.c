@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/09 18:43:04 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/12 18:43:23 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -445,29 +445,29 @@ char		**get_env_paths(t_list *lst)
 	return (env_paths);
 }
 
-int			change_env_var(t_list **lst, char *name, char *newcontent)
-{
-	t_list	*tmp;
-
-	tmp = *lst;
-	while (tmp)
-	{
-		if (ft_strcmp((((t_varenv *)((tmp)->content))->name), name) == 0)
-			break;
-		if ((tmp)->next == NULL)
-			return (FALSE);
-		(tmp) = (tmp)->next;
-	}
-	((t_varenv *)((tmp)->content))->content = newcontent;
-	return (TRUE);
-}
-
-void		del_lst(void *content, size_t size)
-{
-	(void)size;
-	ft_strdel(&((t_varenv *)(content))->name);
-	ft_strdel(&((t_varenv *)(content))->content);
-}
+// int			change_env_var(t_list **lst, char *name, char *newcontent)
+// {
+// 	t_list	*tmp;
+//
+// 	tmp = *lst;
+// 	while (tmp)
+// 	{
+// 		if (ft_strcmp((((t_varenv *)((tmp)->content))->name), name) == 0)
+// 			break;
+// 		if ((tmp)->next == NULL)
+// 			return (FALSE);
+// 		(tmp) = (tmp)->next;
+// 	}
+// 	((t_varenv *)((tmp)->content))->content = newcontent;
+// 	return (TRUE);
+// }
+//
+// void		del_lst(void *content, size_t size)
+// {
+// 	(void)size;
+// 	ft_strdel(&((t_varenv *)(content))->name);
+// 	ft_strdel(&((t_varenv *)(content))->content);
+// }
 
 int			remove_one(t_list **lst, char *name)
 {
@@ -480,7 +480,7 @@ int			remove_one(t_list **lst, char *name)
 	{
 		prev = tmp;
 		*lst = tmp->next;
-		ft_lstdelone(&prev, del_lst);
+		ft_lstdelone(&prev, del_env_var);
 		return (1);
 	}
 	while(tmp)
@@ -489,7 +489,7 @@ int			remove_one(t_list **lst, char *name)
 		{
 				prev = tmp->next;
 				tmp->next = tmp->next->next;
-				ft_lstdelone(&prev, del_lst);
+				ft_lstdelone(&prev, del_env_var);
 				return (1);
 		}
 		tmp = tmp->next;
@@ -622,11 +622,12 @@ int			main(int ac, char **av, char **environ)
 			*/
 			if (ft_strcmp(command[y][0], "exit") == 0)
 			{
-				ft_printf("c'est ca degage\n");
-				if (command[y][1])
-					exit(ft_atoi(command[y][1]));
-				else
-					exit(EXIT_SUCCESS);
+				exit_builtin(command[y][1]);
+				// ft_printf("c'est ca degage\n");
+				// if (command[y][1])
+				// 	exit(ft_atoi(command[y][1]));
+				// else
+				// 	exit(EXIT_SUCCESS);
 			}
 			else if (ft_strcmp(command[y][0], "mypwd") == 0)
 			{

@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/10 19:44:09 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/12 15:42:24 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ int		minishell_parser(char *input, char ****commands_tab)
 	/*
 	** DEBUG
 	*/
-	int i = -1;
-	int y;
-	ft_printf("DEBUG:\n");
-	while (separated_commands[++i])
-	{
-		y = -1;
-		while ((*commands_tab)[i][++y])
-		{
-			ft_printf("commande %d, arg %d = %s\n", i, y, (*commands_tab)[i][y]);
-		}
-	}
+	// int i = -1;
+	// int y;
+	// ft_printf("DEBUG:\n");
+	// while (separated_commands[++i])
+	// {
+	// 	y = -1;
+	// 	while ((*commands_tab)[i][++y])
+	// 	{
+	// 		ft_printf("commande %d, arg %d = %s\n", i, y, (*commands_tab)[i][y]);
+	// 	}
+	// }
 	/*
 	** FIN DEBUG
 	*/

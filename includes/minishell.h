@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/10 16:48:34 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/12 20:11:31 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,12 @@
 # define FAIL_MALLOC	2
 # define FAIL_ 			3
 
-# define SIMPLE_QUOTE 45
-# define DOUBLE_QUOTE 46
+# define SIMPLE_QUOTE 	45
+# define DOUBLE_QUOTE 	46
 
+# define OPTIONS_CD		"LP"
+# define OPT_L 			(1 << 27)
+# define OPT_R 			(1 << 28)
 
 pid_t				g_pid;
 t_list				*g_env_lst;
@@ -69,9 +72,18 @@ int 	ft_count_letters_escape(char *str, char sep);
 char		**ft_strsplit_with_escape(char *str, char sep);
 
 /*
+**	BUILTINS
+*/
+
+void		exit_builtin(char *arg);
+int		cd_builtin(char **args);
+
+/*
 **	ENVIRONMENT
 */
 
+void		del_env_var(void *content, size_t size);
+int			change_env_var(t_list **lst, char *name, char *newcontent);
 t_varenv		*get_env_var_by_name(char *name);
 
 #endif

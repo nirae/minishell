@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/09 20:01:34 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/12 16:24:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ char		*one_more_split(char *s)
 		return (NULL);
 	if (s[i] == ' ' || !s[i] || s[i] == '\n'|| s[i] == '\t')
 		return (NULL);
-	while (s[i] != ' ' && (s[i] != '$' || s[i - 1] == '$') && s[i])
+	while (s[i] != ' ' && s[i] != '\"' && s[i] != '\'' && s[i] != ';' &&
+		(s[i] != '$' || s[i - 1] == '$') && s[i])
 		result[j++] = s[i++];
 	result[j] = '\0';
 	return (result);

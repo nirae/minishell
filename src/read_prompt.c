@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:42:39 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/22 15:28:47 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/12 19:45:46 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,22 @@ static int		final_return(char **s, int n_lus)
 int				read_prompt(const int fd, char **line)
 {
 	char				*buff;
-	char			*final_buff;
+	char				*final_buff;
 	int					n_lus;
 
 	if (BUFF_SIZE <= 0 || (n_lus = read(fd, "", 0)) == -1)
 		return (-1);
 	if (!(buff = ft_strnew(4096)))
 		return (-1);
-	if (!(final_buff = ft_strnew(0)))
-		return (-1);
+	// if (!(final_buff = ft_strnew(0)))
+	// 	return (-1);
+	final_buff = NULL;
 	while (!ft_strchr(final_buff, '\n') && (n_lus = read(fd, buff, 4096)) > 0)
 	{
-		final_buff = ft_strjoin(final_buff, buff);
+		if (!final_buff)
+			final_buff = ft_strdup(buff);
+		else
+			final_buff = ft_strjoin(final_buff, buff);
 		ft_strclr(buff);
 	}
 	ft_strdel(&buff);
