@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 20:11:31 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/13 22:09:21 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <limits.h>
 # include <fcntl.h>
+#include "errno.h"
 
 # define PROMPT "tape ta commande connard > "
 
@@ -36,7 +37,7 @@
 
 # define OPTIONS_CD		"LP"
 # define OPT_L 			(1 << 27)
-# define OPT_R 			(1 << 28)
+# define OPT_P 			(1 << 28)
 
 pid_t				g_pid;
 t_list				*g_env_lst;

@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:26:03 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 20:38:01 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/13 22:42:25 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,16 @@ static int		is_valid_option(char c)
 **	and exit the program with EXIT_FAILURE;
 */
 
-static int		set_options(char *ops, int options, int pos)
+static int		set_options(char *ops, int *options, int pos)
 {
 	if (ops[pos] == '\0')
 		return (FALSE);
 	if (is_valid_option(ops[pos]))
 	{
 		if (ops[pos] == 'L')
-			options |= OPT_L;
-		else if (ops[pos] == 'R')
-			options |= OPT_R;
+			*options |= OPT_L;
+		else if (ops[pos] == 'P')
+			*options |= OPT_P;
 	}
 	else
 	{
@@ -71,7 +71,43 @@ static int		set_options(char *ops, int options, int pos)
 **	- Return TRUE
 */
 
-int				options_parser(char **args, int options, int *pos_args)
+
+static char	*get_complete_path(char *parent, char *name)
+{
+	char	*tmp;
+	char	*result;
+
+	if (name[0] == '/')
+		return (name);
+	if (name[0] == '.' && name[1] == '/')
+	{
+		tmp = ft_strdup(&name[2]);
+		ft_strdel(&name);
+		name = tmp;
+	}
+	if (parent == NULL)
+	{
+		if (!(result = ft_strjoin("./", name)))
+			return (NULL);
+		return (result);
+	}
+	if (parent[ft_strlen(parent) - 1] == '/')
+	{
+		if (!(tmp = ft_strdup(parent)))
+			return (NULL);
+	}
+	else
+	{
+		if (!(tmp = ft_strjoin(parent, "/")))
+			return (NULL);
+	}
+	if (!(result = ft_strjoin(tmp, name)))
+		return (NULL);
+	ft_strdel(&tmp);
+	return (result);
+}
+
+int				options_parser(char **args, int *options, int *pos_args)
 {
 	int				i;
 	int				takeoptions;
@@ -99,21 +135,67 @@ int				options_parser(char **args, int options, int *pos_args)
 int		cd_builtin(char **args)
 {
 	char 	oldpwd[PATH_MAX + 1];
+	char 	pwd[PATH_MAX + 1];
+	int		pos_args;
+	int		options;
+	t_varenv	*tmp;
+
+	options = 0;
+	pos_args = 0;
+	options_parser(args, &options, &pos_args);
+	ft_printf("options = %d, pos_args = %d, argument courant = %s\n", options, pos_args, args[pos_args]);
 	// recupere le pwd
 	getcwd(oldpwd, PATH_MAX + 1);
-	if ((chdir(args[1])) < 0)
-		ft_printf("chdir failed\n");
+	if (pos_args == 0 || !args[pos_args] || !args[pos_args][0])
+	{
+		ft_printf("complete path = %s\n", get_complete_path(get_env_var_by_name("PWD")->content, get_env_var_by_name("HOME")->content));
+		tmp = get_env_var_by_name("HOME");
+		if ((chdir(tmp->content)) < 0)
+			ft_printf("chdir failed, errno = %d\n", errno);
+		else
+		{
+			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
+				ft_printf("OLDPWD not found\n");
+			// PWD
+			// recupere le pwd
+			getcwd(pwd, PATH_MAX + 1);
+			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
+				ft_printf("PWD not found\n");
+			ft_printf("... moving to %s ....\n", tmp->content);
+		}
+	}
+	else if (ft_strcmp(args[pos_args], "-") == 0)
+	{
+		if ((chdir(get_env_var_by_name("OLDPWD")->content)) < 0)
+			ft_printf("chdir failed\n");
+		else
+		{
+			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
+				ft_printf("OLDPWD not found\n");
+			// PWD
+			// recupere le pwd
+			getcwd(pwd, PATH_MAX + 1);
+			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
+				ft_printf("PWD not found\n");
+			ft_printf("... moving to %s ....\n", get_env_var_by_name("OLDPWD")->content);
+		}
+	}
 	else
 	{
-		if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-			ft_printf("OLDPWD not found\n");
-		// PWD
-		char 	pwd[PATH_MAX + 1];
-		// recupere le pwd
-		getcwd(pwd, PATH_MAX + 1);
-		if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-			ft_printf("PWD not found\n");
-		ft_printf("... moving to %s ....\n", args[1]);
+		if ((chdir(args[pos_args])) < 0)
+			ft_printf("chdir failed\n");
+		else
+		{
+			ft_printf("complete path = %s\n", get_complete_path(get_env_var_by_name("PWD")->content, args[pos_args]));
+			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
+				ft_printf("OLDPWD not found\n");
+			// PWD
+			// recupere le pwd
+			getcwd(pwd, PATH_MAX + 1);
+			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
+				ft_printf("PWD not found\n");
+			ft_printf("... moving to %s ....\n", args[pos_args]);
+		}
 	}
 	return (TRUE);
 }

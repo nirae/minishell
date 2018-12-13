@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 18:43:23 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/13 15:36:04 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -637,23 +637,24 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "cd") == 0)
 			{
-				char 	oldpwd[PATH_MAX + 1];
-				// recupere le pwd
-				getcwd(oldpwd, PATH_MAX + 1);
-				if ((chdir(command[y][1])) < 0)
-					ft_printf("chdir failed\n");
-				else
-				{
-					if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-						ft_printf("OLDPWD not found\n");
-					// PWD
-					char 	pwd[PATH_MAX + 1];
-					// recupere le pwd
-					getcwd(pwd, PATH_MAX + 1);
-					if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-						ft_printf("PWD not found\n");
-					ft_printf("... moving to %s ....\n", command[y][1]);
-				}
+				// char 	oldpwd[PATH_MAX + 1];
+				// // recupere le pwd
+				// getcwd(oldpwd, PATH_MAX + 1);
+				// if ((chdir(command[y][1])) < 0)
+				// 	ft_printf("chdir failed\n");
+				// else
+				// {
+				// 	if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
+				// 		ft_printf("OLDPWD not found\n");
+				// 	// PWD
+				// 	char 	pwd[PATH_MAX + 1];
+				// 	// recupere le pwd
+				// 	getcwd(pwd, PATH_MAX + 1);
+				// 	if (!(change_env_var(&g_env_lst, "PWD", pwd)))
+				// 		ft_printf("PWD not found\n");
+				// 	ft_printf("... moving to %s ....\n", command[y][1]);
+				// }
+				cd_builtin(command[y]);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "env") == 0)

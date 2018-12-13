@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/03 14:10:36 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 15:42:50 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/13 15:56:48 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,9 +257,9 @@ char		**ft_strsplit_with_escape(char *str, char sep)
 	}
 	tab[j + 1] = NULL;
 //DEBUG
-	j = -1;
-	while (tab[++j])
-		ft_printf("split escape [%d] = %s\n", j, tab[j]);
+	// j = -1;
+	// while (tab[++j])
+	// 	ft_printf("split escape [%d] = %s\n", j, tab[j]);
 // FIN DEBUG
 	return (tab);
 }
