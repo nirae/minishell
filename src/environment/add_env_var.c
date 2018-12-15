@@ -1,37 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   change_env_var.c                                   :+:      :+:    :+:   */
+/*   add_env_var.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 18:37:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 00:27:11 by ndubouil         ###   ########.fr       */
+/*   Created: 2018/12/15 00:15:53 by ndubouil          #+#    #+#             */
+/*   Updated: 2018/12/15 00:27:00 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// FREE
-
-int			change_env_var(t_list **lst, char *name, char *newcontent)
+int		add_env_var(char *name, char *content)
 {
-	t_list	*tmp;
+	t_list	*tmplst;
 
-	tmp = *lst;
-	while (tmp)
-	{
-		if (ft_strcmp((((t_varenv *)((tmp)->content))->name), name) == 0)
-			break;
-		if ((tmp)->next == NULL)
-		{
-			// a proteger
-			add_env_var(name, newcontent);
-			return (TRUE);
-		}
-		(tmp) = (tmp)->next;
-	}
-	ft_strdel(&((t_varenv *)((tmp)->content))->content);
-	((t_varenv *)((tmp)->content))->content = ft_strdup(newcontent);
+	// a proteger
+	tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
+	tmplst->content = create_varenv(name, content);
+	ft_lstaddend(&g_env_lst, tmplst);
 	return (TRUE);
 }

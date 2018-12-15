@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/13 15:36:04 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 00:25:42 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ void	catch_signal_kill(int signal)
 // 	}
 // }
 
-void	error()
-{
-	ft_printf("minishell failed\n");
-	exit(EXIT_FAILURE);
-}
+// void	error()
+// {
+// 	ft_printf("minishell failed\n");
+// 	exit(EXIT_FAILURE);
+// }
 
 /////////////////////////////////////////////////////////////////////////////
 ///////////////////////// ECHO ///////////////////////////////////
@@ -337,22 +337,22 @@ char		**ft_strsplit_parser2(char *str)
 	my_env[i] = NULL;
 	return (my_env);
 }*/
-
-t_varenv	*create_varenv(char *name, char *content)
-{
-	t_varenv	*varenv;
-
-	// Gerer l'erreur
-	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
-		error();
-	if (!(varenv->name = ft_strdup(name)))
-		error();
-	if (!content)
-		varenv->content = NULL;
-	else if (!(varenv->content = ft_strdup(content)))
-		error();
-	return (varenv);
-}
+//
+// t_varenv	*create_varenv(char *name, char *content)
+// {
+// 	t_varenv	*varenv;
+//
+// 	// Gerer l'erreur
+// 	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
+// 		error();
+// 	if (!(varenv->name = ft_strdup(name)))
+// 		error();
+// 	if (!content)
+// 		varenv->content = NULL;
+// 	else if (!(varenv->content = ft_strdup(content)))
+// 		error();
+// 	return (varenv);
+// }
 
 void		create_my_env(t_list **lst, char **environ)
 {
@@ -557,7 +557,7 @@ int			main(int ac, char **av, char **environ)
 	char	***command = NULL;
 	char	**env_paths;
 	//t_list	*env;
-	t_list	*tmplst;
+	//t_list	*tmplst;
 	struct stat st;
 	struct stat stg;
 	int		i;
@@ -565,7 +565,7 @@ int			main(int ac, char **av, char **environ)
 	int		status;
 	int		ret;
 //	int 	y;
-	char 	str[PATH_MAX + 1];
+//	char 	str[PATH_MAX + 1];
 
 	// t_varenv	*hash_tab[HASH_TAB_MAX];
 	//
@@ -631,8 +631,12 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "mypwd") == 0)
 			{
-				getcwd(str, PATH_MAX + 1);
-				ft_printf("pwd : %s\n", str);
+				ft_printf("%s\n", get_env_var_by_name("PWD")->content);
+				continue;
+			}
+			else if (ft_strcmp(command[y][0], "myoldpwd") == 0)
+			{
+				ft_printf("%s\n", get_env_var_by_name("OLDPWD")->content);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "cd") == 0)
@@ -655,6 +659,7 @@ int			main(int ac, char **av, char **environ)
 				// 	ft_printf("... moving to %s ....\n", command[y][1]);
 				// }
 				cd_builtin(command[y]);
+				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				continue;
 			}
 			else if (ft_strcmp(command[y][0], "env") == 0)
@@ -672,9 +677,10 @@ int			main(int ac, char **av, char **environ)
 			{
 				if (command[y][1])
 				{
-					tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
-					tmplst->content = create_varenv(command[y][1], command[y][2]);
-					ft_lstaddend(&g_env_lst, tmplst);
+					// tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
+					// tmplst->content = create_varenv(command[y][1], command[y][2]);
+					// ft_lstaddend(&g_env_lst, tmplst);
+					change_env_var(&g_env_lst, command[y][1], command[y][2]);
 					env_lst_to_tab(&g_env_lst, &g_env_tab);
 					env_paths = get_env_paths(g_env_lst);
 				}

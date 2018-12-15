@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/13 22:09:21 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 00:22:02 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,12 @@ int		cd_builtin(char **args);
 **	ENVIRONMENT
 */
 
+int		add_env_var(char *name, char *content);
+t_varenv	*create_varenv(char *name, char *content);
 void		del_env_var(void *content, size_t size);
 int			change_env_var(t_list **lst, char *name, char *newcontent);
 t_varenv		*get_env_var_by_name(char *name);
+
+void	error(void);
 
 #endif

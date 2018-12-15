@@ -6,11 +6,15 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:26:03 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/13 22:42:25 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 01:46:35 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*******************************************************************************
+**							OPTIONS
+*******************************************************************************/
 
 /*
 **	Check if the option is valid, return TRUE or FALSE
@@ -70,7 +74,6 @@ static int		set_options(char *ops, int *options, int pos)
 **			- Create the node for the file in the tree args
 **	- Return TRUE
 */
-
 
 static char	*get_complete_path(char *parent, char *name)
 {
@@ -132,70 +135,203 @@ int				options_parser(char **args, int *options, int *pos_args)
 	return (TRUE);
 }
 
+/*******************************************************************************
+**							FIN OPTIONS
+*******************************************************************************/
+
+char	*ft_strjointab(char **tab, char sep)
+{
+	int		i;
+	int		len;
+	char 	*result;
+	char 	sepp[2];
+
+	i = -1;
+	len = 0;
+	sepp[0] = sep;
+	sepp[1] = '\0';
+	if (tab == NULL)
+		return (NULL);
+	while (tab[++i])
+		len += ft_strlen(tab[i]);
+	if (sep != 0)
+		len += i;
+	if (!(result = ft_strnew(len)))
+		return (NULL);
+	i = -1;
+	while (tab[++i])
+	{
+		ft_strcat(result, sepp);
+		ft_strcat(result, tab[i]);
+	}
+	return (result);
+}
+
+void	ft_realloc_addend_tab(char ***tab, char *elem)
+{
+	int		i;
+	char 	**tmp;
+
+	if (*tab == NULL || !elem)
+		return;
+	i = -1;
+	while ((*tab)[++i]);
+	tmp = ft_memalloc((i + 2) * sizeof(char *));
+	i = -1;
+	while ((*tab)[++i])
+		tmp[i] = ft_strdup((*tab)[i]);
+	tmp[i] = ft_strdup(elem);
+	tmp[i + 1] = NULL;
+	i = -1;
+	while ((*tab)[++i])
+		ft_strdel(&(*tab)[i]);
+	ft_memdel((void **)*tab);
+	*tab = tmp;
+}
+
+int		check_path_errors(char *path)
+{
+	struct stat st;
+
+	// Test avec stat si le dossier existe -> sinon erreur
+	if ((stat(path, &st)) < 0)
+	{
+		// EXISTE PAS ERREUR
+		ft_printf("minishell: cd: no such file or directory: %s\n", path);
+		return (FALSE);
+	}
+	// Si il existe
+	else
+	{
+		// Si c'est pas un dossier -> erreur
+		if (!S_ISDIR(st.st_mode))
+		{
+			// PAS UN DOSSIER
+			ft_printf("minishell: cd: not a directory: %s\n", path);
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+}
+
+int		ft_stringtab_len(char **tab)
+{
+	int		i;
+
+	i = -1;
+	while (tab[++i]);
+	return (i);
+}
+
+char	*get_final_path(char *path)
+{
+	char **arg_tab;
+	char **pwd_tab;
+	int pwd_tab_len;
+	int i;
+	char *tmp;
+	char *str;
+
+	arg_tab = NULL;
+	pwd_tab = NULL;
+	// Si le path envoye commence par '..'
+	if (path[0] == '.')
+	{
+		// Creation d'un tableau de char ARG_TAB en splitant sur le path envoye
+		arg_tab = ft_strsplit(path, '/');
+		// Creation d'un tableau de char PWD_TAB en splitant sur la variable d'env PWD
+		pwd_tab = ft_strsplit(get_env_var_by_name("PWD")->content, '/');
+		// compte le nombre d'elements de pwd_tab
+		pwd_tab_len = ft_stringtab_len(pwd_tab);
+		// Reconstruction du pwd avec le path envoyé
+		i = -1;
+		// Boucle sur chaque dossier du path donne
+		while (arg_tab[++i])
+		{
+			// Si c'est egal a '..'
+			if (ft_strcmp(arg_tab[i], "..") == 0)
+			{
+				ft_strdel(&pwd_tab[pwd_tab_len - 1]);
+				pwd_tab[pwd_tab_len - 1] = NULL;
+				pwd_tab_len--;
+			}
+			// Si c'est egal a '.'
+			else if (ft_strcmp(arg_tab[i], ".") == 0)
+				continue;
+			// Sinon
+			else
+			{
+				ft_realloc_addend_tab(&pwd_tab, arg_tab[i]);
+				pwd_tab_len++;
+			}
+			// Reconstruction de la string du path ou on en est pour verifier
+			tmp = ft_strjointab(pwd_tab, '/');
+			if (!check_path_errors(tmp))
+				return (FALSE);
+			ft_strdel(&tmp);
+		}
+		return (ft_strdup(ft_strjointab(pwd_tab, '/')));
+	}
+	// Si le path commence pas par '..'
+	return (ft_strdup(get_complete_path(get_env_var_by_name("PWD")->content, path)));
+	return (str);
+}
+
+int		change_directory(char *pwd, char *oldpwd, int options)
+{
+	char cwd[PATH_MAX + 1];
+
+	if (!check_path_errors(pwd))
+		return (FALSE);
+	if ((chdir(pwd)) < 0)
+		// Mieux gerer l'erreur
+		ft_printf("chdir failed, errno = %d\n", errno);
+	// Si c'est bon
+	else
+	{
+		// Change la variable d'env OLDPWD
+		if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
+			ft_printf("OLDPWD not found\n");
+		// Change la variable d'env PWD
+		if (options & OPT_P)
+		{
+			getcwd(cwd, PATH_MAX + 1);
+			if (!(change_env_var(&g_env_lst, "PWD", cwd)))
+				ft_printf("PWD not found\n");
+		}
+		else
+		{
+			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
+				ft_printf("PWD not found\n");
+		}
+	}
+	return (TRUE);
+}
+
 int		cd_builtin(char **args)
 {
-	char 	oldpwd[PATH_MAX + 1];
-	char 	pwd[PATH_MAX + 1];
+	char 	*oldpwd = NULL;
+	char 	*pwd = NULL;
 	int		pos_args;
 	int		options;
-	t_varenv	*tmp;
 
 	options = 0;
 	pos_args = 0;
+	// Recupere les options
 	options_parser(args, &options, &pos_args);
-	ft_printf("options = %d, pos_args = %d, argument courant = %s\n", options, pos_args, args[pos_args]);
-	// recupere le pwd
-	getcwd(oldpwd, PATH_MAX + 1);
+	// 			Debug des options
+	//			ft_printf("options = %d, pos_args = %d, argument courant = %s\n", options, pos_args, args[pos_args]);
+	// Recupere le oldpwd depuis l'environement
+	// a proteger
+	oldpwd = get_env_var_by_name("PWD")->content;
+	// SI cd
 	if (pos_args == 0 || !args[pos_args] || !args[pos_args][0])
-	{
-		ft_printf("complete path = %s\n", get_complete_path(get_env_var_by_name("PWD")->content, get_env_var_by_name("HOME")->content));
-		tmp = get_env_var_by_name("HOME");
-		if ((chdir(tmp->content)) < 0)
-			ft_printf("chdir failed, errno = %d\n", errno);
-		else
-		{
-			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-				ft_printf("OLDPWD not found\n");
-			// PWD
-			// recupere le pwd
-			getcwd(pwd, PATH_MAX + 1);
-			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-				ft_printf("PWD not found\n");
-			ft_printf("... moving to %s ....\n", tmp->content);
-		}
-	}
+		pwd = get_final_path(get_env_var_by_name("HOME")->content);
+	// SI cd -
 	else if (ft_strcmp(args[pos_args], "-") == 0)
-	{
-		if ((chdir(get_env_var_by_name("OLDPWD")->content)) < 0)
-			ft_printf("chdir failed\n");
-		else
-		{
-			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-				ft_printf("OLDPWD not found\n");
-			// PWD
-			// recupere le pwd
-			getcwd(pwd, PATH_MAX + 1);
-			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-				ft_printf("PWD not found\n");
-			ft_printf("... moving to %s ....\n", get_env_var_by_name("OLDPWD")->content);
-		}
-	}
+		pwd = get_final_path(get_env_var_by_name("OLDPWD")->content);
 	else
-	{
-		if ((chdir(args[pos_args])) < 0)
-			ft_printf("chdir failed\n");
-		else
-		{
-			ft_printf("complete path = %s\n", get_complete_path(get_env_var_by_name("PWD")->content, args[pos_args]));
-			if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-				ft_printf("OLDPWD not found\n");
-			// PWD
-			// recupere le pwd
-			getcwd(pwd, PATH_MAX + 1);
-			if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-				ft_printf("PWD not found\n");
-			ft_printf("... moving to %s ....\n", args[pos_args]);
-		}
-	}
+		pwd = get_final_path(args[pos_args]);
+	change_directory(pwd, oldpwd, options);
 	return (TRUE);
 }

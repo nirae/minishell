@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/12 18:45:18 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/15 00:21:19 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,11 @@ SRCS	=	$(SRC)read_prompt.c												\
 			$(P)minishell_parser.c											\
 			$(ENV)get_env_var_by_name.c										\
 			$(ENV)change_env_var.c											\
+			$(ENV)add_env_var.c												\
+			$(ENV)create_varenv.c											\
 			$(ENV)del_env_var.c												\
 			$(SRC)ft_split_escape.c											\
+			$(SRC)error.c													\
 			$(BT)exit_builtin.c												\
 			$(BT)cd_builtin.c
 
