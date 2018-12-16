@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 23:25:56 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 20:27:33 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define HASH_TAB_MAX	4096
 # define TRUE			1
 # define FALSE			0
-# define FAIL_ 			3
+# define FAIL_			3
 
 # define SIMPLE_QUOTE 	45
 # define DOUBLE_QUOTE 	46
@@ -78,10 +78,21 @@ int 	ft_count_letters_escape(char *str, char sep);
 char		**ft_strsplit_with_escape(char *str, char sep);
 
 /*
-**	BUILTINS
+**		BUILTINS
 */
 
 void		exit_builtin(char *arg);
+
+/*
+**	CD
+*/
+
+int		ft_realloc_addend_tab(char ***tab, char *elem);
+char	*ft_strjointab(char **tab, char sep);
+int		ft_stringtab_len(char **tab);
+int		check_path_errors(char *path);
+char	*get_final_path(char *path);
+int	build_pwd_tab(char ***arg_tab, char ***pwd_tab, int pwd_tab_len);
 int		cd_builtin(char **args);
 
 /*

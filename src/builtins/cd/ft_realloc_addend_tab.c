@@ -1,25 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add_env_var.c                                      :+:      :+:    :+:   */
+/*   ft_realloc_addend_tab.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/15 00:15:53 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 20:32:12 by ndubouil         ###   ########.fr       */
+/*   Created: 2018/12/16 19:41:33 by ndubouil          #+#    #+#             */
+/*   Updated: 2018/12/16 19:41:42 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		add_env_var(char *name, char *content)
+int		ft_realloc_addend_tab(char ***tab, char *elem)
 {
-	t_list	*tmplst;
+	int		i;
+	char 	**tmp;
 
-	if (!(tmplst = ft_lstnew(NULL, sizeof(t_varenv *))))
+	if (*tab == NULL || !elem)
 		return (FALSE);
-	if (!(tmplst->content = create_varenv(name, content)))
+	i = -1;
+	while ((*tab)[++i]);
+	if (!(tmp = ft_memalloc((i + 2) * sizeof(char *))))
 		return (FALSE);
-	ft_lstaddend(&g_env_lst, tmplst);
+	i = -1;
+	while ((*tab)[++i])
+		if (!(tmp[i] = ft_strdup((*tab)[i])))
+			return (FALSE);
+	if (!(tmp[i] = ft_strdup(elem)))
+		return (FALSE);
+	tmp[i + 1] = NULL;
+	i = -1;
+	while ((*tab)[++i])
+		ft_strdel(&(*tab)[i]);
+	ft_strdel(&(*tab)[i]);
+	ft_memdel((void **)*tab);
+	*tab = tmp;
 	return (TRUE);
 }

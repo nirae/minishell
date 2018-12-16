@@ -1,28 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_varenv.c                                    :+:      :+:    :+:   */
+/*   ft_strjointab.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/15 00:18:42 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 20:31:55 by ndubouil         ###   ########.fr       */
+/*   Created: 2018/12/16 19:39:34 by ndubouil          #+#    #+#             */
+/*   Updated: 2018/12/16 19:39:58 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_varenv	*create_varenv(char *name, char *content)
+char	*ft_strjointab(char **tab, char sep)
 {
-	t_varenv	*varenv;
+	int		i;
+	int		len;
+	char 	*result;
+	char 	sepp[2];
 
-	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
+	i = -1;
+	len = 0;
+	sepp[0] = sep;
+	sepp[1] = '\0';
+	if (tab == NULL || !tab[0])
+		return (ft_strdup(sepp));
+	while (tab[++i])
+		len += ft_strlen(tab[i]);
+	len += i;
+	if (!(result = ft_strnew(len)))
 		return (NULL);
-	if (!(varenv->name = ft_strdup(name)))
-		return (NULL);
-	if (!content)
-		varenv->content = NULL;
-	else if (!(varenv->content = ft_strdup(content)))
-		return (NULL);
-	return (varenv);
+	i = -1;
+	while (tab[++i])
+	{
+		ft_strcat(result, sepp);
+		ft_strcat(result, tab[i]);
+	}
+	return (result);
 }

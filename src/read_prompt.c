@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:42:39 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 19:45:46 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 16:58:12 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static int		final_return(char **s, int n_lus)
 	int		i;
 	char	*temp;
 
-	if (n_lus == 0 && **s == 0)
+	// VOIR POUR CONTROL D ET LE CATCH
+	if (n_lus == 0 && *s == 0)
 	{
 		ft_strdel(s);
 		return (0);

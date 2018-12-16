@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_varenv.c                                    :+:      :+:    :+:   */
+/*   check_path_errors.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/15 00:18:42 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 20:31:55 by ndubouil         ###   ########.fr       */
+/*   Created: 2018/12/16 19:37:05 by ndubouil          #+#    #+#             */
+/*   Updated: 2018/12/16 19:37:27 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_varenv	*create_varenv(char *name, char *content)
+int		check_path_errors(char *path)
 {
-	t_varenv	*varenv;
+	struct stat st;
 
-	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
-		return (NULL);
-	if (!(varenv->name = ft_strdup(name)))
-		return (NULL);
-	if (!content)
-		varenv->content = NULL;
-	else if (!(varenv->content = ft_strdup(content)))
-		return (NULL);
-	return (varenv);
+	if ((stat(path, &st)) < 0)
+	{
+		ft_printf("minishell: cd: no such file or directory: %s\n", path);
+		return (FALSE);
+	}
+	else
+	{
+		if (!S_ISDIR(st.st_mode))
+		{
+			ft_printf("minishell: cd: not a directory: %s\n", path);
+			return (FALSE);
+		}
+	}
+	return (TRUE);
 }

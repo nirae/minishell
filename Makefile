@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/15 22:53:31 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/16 19:44:19 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC		=	/usr/bin/gcc
 RM		=	/bin/rm
-CFLAGS	=	-Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 
@@ -25,6 +25,7 @@ SRC		=	./src/
 P		=	$(SRC)parsing/
 ENV		=	$(SRC)environment/
 BT		=	$(SRC)builtins/
+CD		=	$(BT)cd/
 
 #  Files
 
@@ -44,7 +45,13 @@ SRCS	=	$(SRC)read_prompt.c												\
 			$(SRC)ft_split_escape.c											\
 			$(SRC)error.c													\
 			$(BT)exit_builtin.c												\
-			$(BT)cd_builtin.c
+			$(CD)get_final_path.c												\
+			$(CD)check_path_errors.c												\
+			$(CD)ft_stringtab_len.c												\
+			$(CD)ft_strjointab.c												\
+			$(CD)ft_realloc_addend_tab.c												\
+			$(CD)build_pwd_tab.c												\
+			$(CD)cd_builtin.c
 
 OBJ		=	$(patsubst %.c,%.o,$(SRCS))
 # Name

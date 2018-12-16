@@ -6,13 +6,11 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:37:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 00:27:11 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 20:34:14 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// FREE
 
 int			change_env_var(t_list **lst, char *name, char *newcontent)
 {
@@ -25,13 +23,14 @@ int			change_env_var(t_list **lst, char *name, char *newcontent)
 			break;
 		if ((tmp)->next == NULL)
 		{
-			// a proteger
-			add_env_var(name, newcontent);
+			if (!add_env_var(name, newcontent))
+				return (FALSE);
 			return (TRUE);
 		}
 		(tmp) = (tmp)->next;
 	}
 	ft_strdel(&((t_varenv *)((tmp)->content))->content);
-	((t_varenv *)((tmp)->content))->content = ft_strdup(newcontent);
+	if (!(((t_varenv *)((tmp)->content))->content = ft_strdup(newcontent)))
+		return (FALSE);
 	return (TRUE);
 }
