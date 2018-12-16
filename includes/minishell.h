@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 00:22:02 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 23:25:56 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,15 @@
 
 # define PROMPT "tape ta commande connard > "
 
+/*
+**	Pour my_errno
+*/
+
+# define FAIL_MALLOC	100
+
 # define HASH_TAB_MAX	4096
 # define TRUE			1
 # define FALSE			0
-# define FAIL_MALLOC	2
 # define FAIL_ 			3
 
 # define SIMPLE_QUOTE 	45
@@ -42,7 +47,7 @@
 pid_t				g_pid;
 t_list				*g_env_lst;
 char				**g_env_tab;
-//int					my_errno;
+int					g_my_errno;
 
 typedef struct		s_command
 {
@@ -89,6 +94,8 @@ void		del_env_var(void *content, size_t size);
 int			change_env_var(t_list **lst, char *name, char *newcontent);
 t_varenv		*get_env_var_by_name(char *name);
 
+int		ft_strarraylen(char **tab);
+void	ft_strtabdel(char ***tab);
 void	error(void);
 
 #endif

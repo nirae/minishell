@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 00:25:42 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 23:47:11 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,7 +384,7 @@ void		create_my_env(t_list **lst, char **environ)
 			*lst = tmplst;
 		else
 			ft_lstadd(lst, tmplst);
-		ft_memdel((void **)&env);
+		ft_strtabdel(&env);
 		i++;
 	}
 }
@@ -562,6 +562,7 @@ int			main(int ac, char **av, char **environ)
 	struct stat stg;
 	int		i;
 	int		y;
+	int z;
 	int		status;
 	int		ret;
 //	int 	y;
@@ -576,6 +577,7 @@ int			main(int ac, char **av, char **environ)
 	(void)av;
 	g_env_lst = NULL;
 	g_env_tab = NULL;
+	g_my_errno = 0;
 	// copie de environ
 	create_my_env(&g_env_lst, environ);
 	//ft_lstiter(env, print_lstenv);
@@ -603,8 +605,10 @@ int			main(int ac, char **av, char **environ)
 		if (!(minishell_parser(strrr, &command)))
 		{
 			ft_printf("%s\n", "Le parsing a fail");
+			ft_strdel(&strrr);
 			continue;
 		}
+		ft_strdel(&strrr);
 		// ft_strdel(&line);
 		// read_prompt(0, &line, 1);
 		// ft_printf("reste du buffer : %s\n", line);
@@ -659,6 +663,8 @@ int			main(int ac, char **av, char **environ)
 				// 	ft_printf("... moving to %s ....\n", command[y][1]);
 				// }
 				cd_builtin(command[y]);
+				// ft_strtabdel(&(command[y]));
+				ft_strtabdel(&g_env_tab);
 				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				continue;
 			}
@@ -681,6 +687,7 @@ int			main(int ac, char **av, char **environ)
 					// tmplst->content = create_varenv(command[y][1], command[y][2]);
 					// ft_lstaddend(&g_env_lst, tmplst);
 					change_env_var(&g_env_lst, command[y][1], command[y][2]);
+					ft_strtabdel(&g_env_tab);
 					env_lst_to_tab(&g_env_lst, &g_env_tab);
 					env_paths = get_env_paths(g_env_lst);
 				}
@@ -689,6 +696,7 @@ int			main(int ac, char **av, char **environ)
 			else if (ft_strcmp(command[y][0], "unsetenv") == 0)
 			{
 				remove_one(&g_env_lst, command[y][1]);
+				ft_strtabdel(&g_env_tab);
 				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				env_paths = get_env_paths(g_env_lst);
 				continue;
@@ -773,8 +781,12 @@ int			main(int ac, char **av, char **environ)
 			if (S_ISDIR(stg.st_mode) && ret < 0)
 				ft_printf("minishell: %s is a directory\n", command[y][0]);
 		}
-		//ft_printf("tiens ton resultat de merde : %s\n", line);
-
+		// FREE command
+		z = -1;
+		while (command[++z])
+			ft_strtabdel(&(command[z]));
 	}
+	ft_strtabdel(&g_env_tab);
+	ft_lstdel(&g_env_lst, del_env_var);
 	return (0);
 }

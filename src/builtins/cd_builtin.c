@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:26:03 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 01:46:35 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 00:57:31 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,11 +151,13 @@ char	*ft_strjointab(char **tab, char sep)
 	sepp[0] = sep;
 	sepp[1] = '\0';
 	if (tab == NULL)
-		return (NULL);
+		return (ft_strdup(sepp));
+	if (!tab[0])
+		return (ft_strdup(sepp));
 	while (tab[++i])
 		len += ft_strlen(tab[i]);
-	if (sep != 0)
-		len += i;
+	len += i;
+	// ft_printf("len = %d\n", len);
 	if (!(result = ft_strnew(len)))
 		return (NULL);
 	i = -1;
@@ -185,6 +187,7 @@ void	ft_realloc_addend_tab(char ***tab, char *elem)
 	i = -1;
 	while ((*tab)[++i])
 		ft_strdel(&(*tab)[i]);
+	ft_strdel(&(*tab)[i]);
 	ft_memdel((void **)*tab);
 	*tab = tmp;
 }
@@ -223,57 +226,79 @@ int		ft_stringtab_len(char **tab)
 	return (i);
 }
 
+static int	build_pwd_tab(char ***arg_tab, char ***pwd_tab, int pwd_tab_len)
+{
+	int		i;
+	char 	*tmp;
+
+	i = -1;
+	// Boucle sur chaque dossier du path donne
+	while ((*arg_tab)[++i])
+	{
+		// Si c'est egal a '..'
+		if (ft_strcmp((*arg_tab)[i], "..") == 0)
+		{
+			if (pwd_tab_len <= 0)
+				pwd_tab_len = 1;
+			ft_strdel(&(*pwd_tab)[pwd_tab_len]);
+			ft_strdel(&(*pwd_tab)[pwd_tab_len - 1]);
+			(*pwd_tab)[pwd_tab_len - 1] = NULL;
+			if (!(*pwd_tab)[0])
+				ft_realloc_addend_tab(pwd_tab, "");
+			else
+				pwd_tab_len--;
+		}
+		// Si c'est egal a '.'
+		else if (ft_strcmp((*arg_tab)[i], ".") == 0)
+			continue;
+		// Sinon
+		else
+		{
+			ft_realloc_addend_tab(pwd_tab, (*arg_tab)[i]);
+			pwd_tab_len++;
+		}
+		// Reconstruction de la string du path ou on en est pour verifier
+		tmp = ft_strjointab(*pwd_tab, '/');
+		if (!check_path_errors(tmp))
+		{
+			ft_strdel(&tmp);
+			return (FALSE);
+		}
+		ft_strdel(&tmp);
+	}
+	return (TRUE);
+}
+
 char	*get_final_path(char *path)
 {
 	char **arg_tab;
 	char **pwd_tab;
 	int pwd_tab_len;
-	int i;
-	char *tmp;
+	t_varenv *tmp;
 	char *str;
 
 	arg_tab = NULL;
 	pwd_tab = NULL;
-	// Si le path envoye commence par '..'
-	if (path[0] == '.')
+	// Si le path envoye commence par '.'
+	if (path[0] == '/')
+		return (ft_strdup(get_complete_path(get_env_var_by_name("PWD")->content, path)));
+	// Creation d'un tableau de char ARG_TAB en splitant sur le path envoye
+	arg_tab = ft_strsplit(path, '/');
+	// Creation d'un tableau de char PWD_TAB en splitant sur la variable d'env PWD
+	tmp = get_env_var_by_name("PWD");
+	pwd_tab = ft_strsplit(tmp->content, '/');
+	// compte le nombre d'elements de pwd_tab
+	pwd_tab_len = ft_stringtab_len(pwd_tab);
+	// Reconstruction du pwd avec le path envoyé
+	if (!build_pwd_tab(&arg_tab, &pwd_tab, pwd_tab_len))
 	{
-		// Creation d'un tableau de char ARG_TAB en splitant sur le path envoye
-		arg_tab = ft_strsplit(path, '/');
-		// Creation d'un tableau de char PWD_TAB en splitant sur la variable d'env PWD
-		pwd_tab = ft_strsplit(get_env_var_by_name("PWD")->content, '/');
-		// compte le nombre d'elements de pwd_tab
-		pwd_tab_len = ft_stringtab_len(pwd_tab);
-		// Reconstruction du pwd avec le path envoyé
-		i = -1;
-		// Boucle sur chaque dossier du path donne
-		while (arg_tab[++i])
-		{
-			// Si c'est egal a '..'
-			if (ft_strcmp(arg_tab[i], "..") == 0)
-			{
-				ft_strdel(&pwd_tab[pwd_tab_len - 1]);
-				pwd_tab[pwd_tab_len - 1] = NULL;
-				pwd_tab_len--;
-			}
-			// Si c'est egal a '.'
-			else if (ft_strcmp(arg_tab[i], ".") == 0)
-				continue;
-			// Sinon
-			else
-			{
-				ft_realloc_addend_tab(&pwd_tab, arg_tab[i]);
-				pwd_tab_len++;
-			}
-			// Reconstruction de la string du path ou on en est pour verifier
-			tmp = ft_strjointab(pwd_tab, '/');
-			if (!check_path_errors(tmp))
-				return (FALSE);
-			ft_strdel(&tmp);
-		}
-		return (ft_strdup(ft_strjointab(pwd_tab, '/')));
+		ft_strtabdel(&arg_tab);
+		ft_strtabdel(&pwd_tab);
+		return (FALSE);
 	}
-	// Si le path commence pas par '..'
-	return (ft_strdup(get_complete_path(get_env_var_by_name("PWD")->content, path)));
+	str = ft_strjointab(pwd_tab, '/');
+	ft_strtabdel(&arg_tab);
+	ft_strtabdel(&pwd_tab);
 	return (str);
 }
 
@@ -332,6 +357,11 @@ int		cd_builtin(char **args)
 		pwd = get_final_path(get_env_var_by_name("OLDPWD")->content);
 	else
 		pwd = get_final_path(args[pos_args]);
-	change_directory(pwd, oldpwd, options);
+	if (!pwd || !change_directory(pwd, oldpwd, options))
+	{
+		ft_strdel(&pwd);
+		return (FALSE);
+	}
+	ft_strdel(&pwd);
 	return (TRUE);
 }

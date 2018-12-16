@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 15:42:24 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/15 23:37:02 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,14 @@ static	int split_each_commands(char **commands, char ****commands_tab)
 	return (TRUE);
 }
 
-static	void free_separated_commands(char ***tab)
-{
-	int		i;
-
-	i = -1;
-	while ((*tab)[++i])
-		ft_strdel(&(*tab)[i]);
-}
+// static	void free_separated_commands(char ***tab)
+// {
+// 	int		i;
+//
+// 	i = -1;
+// 	while ((*tab)[++i])
+// 		ft_strdel(&(*tab)[i]);
+// }
 
 int		minishell_parser(char *input, char ****commands_tab)
 {
@@ -88,7 +88,7 @@ int		minishell_parser(char *input, char ****commands_tab)
 	/*
 	** FIN DEBUG
 	*/
-
-	free_separated_commands(&separated_commands);
+	ft_strtabdel(&separated_commands);
+	// free_separated_commands(&separated_commands);
 	return (TRUE);
 }

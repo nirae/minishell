@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/15 00:21:19 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/15 22:53:31 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC		=	/usr/bin/gcc
 RM		=	/bin/rm
-CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g3 #-fsanitize=address
 
 # Directories
 
@@ -33,6 +33,8 @@ MAIN	=	$(SRC)main.c
 SRCS	=	$(SRC)read_prompt.c												\
 			$(SRC)get_complete_command.c									\
 			$(SRC)minishell_split.c											\
+			$(SRC)ft_strtabdel.c											\
+			$(SRC)ft_arraylen.c											\
 			$(P)minishell_parser.c											\
 			$(ENV)get_env_var_by_name.c										\
 			$(ENV)change_env_var.c											\
