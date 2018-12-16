@@ -6,11 +6,18 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 18:14:04 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/17 00:09:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// void     ft_getleaks(char *str)
+// {
+//        system("leaks minishell");
+//        ft_printf("%s\n", str);
+//        getchar();
+// }
 
 void	catch_signal(int signal)
 {
@@ -27,118 +34,6 @@ void	catch_signal_kill(int signal)
 		kill(g_pid, SIGTERM);
 	}
 }
-
-// void	catch_signal_echo(int signal)
-// {
-// 	if (signal == SIGINT)
-// 	{
-//
-// 	}
-// }
-
-// void	error()
-// {
-// 	ft_printf("minishell failed\n");
-// 	exit(EXIT_FAILURE);
-// }
-
-/////////////////////////////////////////////////////////////////////////////
-///////////////////////// ECHO ///////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-
-// static int		echo(char *str)
-// {
-// 	int i = -1;
-// 	int y = 0;
-// 	char *tmp;
-// 	char final_str[4096];
-// 	int nb_double_quotes = 0;
-// 	int nb_simple_quotes = 0;
-// // 1 simple
-// // 2 double
-// 	int first_quote = 0;
-// 	char *line;
-//
-// 	//signal(SIGINT, catch_signal_echo);
-// 	final_str[0] = 0;
-// 	while (str[++i])
-// 	{
-// 		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
-// 		signal(SIGINT, catch_signal);
-// 		if (str[i] == ' ' && (nb_double_quotes % 2) == 0 && (nb_simple_quotes % 2) == 0)
-// 			continue;
-// 		else if (str[i] == '\"')
-// 		{
-// 			if (first_quote == 1 && (nb_simple_quotes % 2) != 0)
-// 			{
-// 				final_str[y] = str[i];
-// 				y++;
-// 				// if (str[i + 1] == ' ')
-// 				// {
-// 				// 	final_str[y] = ' ';
-// 				// 	y++;
-// 				// }
-// 			}
-// 			nb_double_quotes++;
-// 			if ((nb_simple_quotes % 2) == 0)
-// 				first_quote = 2;
-// 			//continue;
-// 		}
-// 		else if (str[i] == '\'')
-// 		{
-// 			if (first_quote == 2 && (nb_double_quotes % 2) != 0)
-// 			{
-// 				final_str[y] = str[i];
-// 				y++;
-// 				// if (str[i + 1] == ' ')
-// 				// {
-// 				// 	final_str[y] = ' ';
-// 				// 	y++;
-// 				// }
-// 			}
-// 			nb_simple_quotes++;
-// 			if ((nb_double_quotes % 2) == 0)
-// 				first_quote = 1;
-// 		//	continue;
-// 		}
-// 		else
-// 		{
-// 			final_str[y] = str[i];
-// 			y++;
-// 			if (str[i + 1] == ' ')
-// 			{
-// 				final_str[y] = ' ';
-// 				y++;
-// 			}
-// 		}
-// 		if (str[i + 1] == 0)
-// 		{
-// 			if (((nb_double_quotes % 2) != 0 && first_quote == 2) || ((nb_simple_quotes % 2) != 0 && first_quote == 1))
-// 			{
-// 				ft_printf("termine ta quote putain>");
-// 				line = NULL;
-// 				if (get_next_line(0, &line) < 0)
-// 					error();
-// 				if (!line[0])
-// 					line[0] = '\n';
-// 				tmp = str;
-// 				str = ft_strjoin(tmp, "\n");
-// 				tmp = str;
-// 				str = ft_strjoin(tmp, line);
-// 				ft_strdel(&line);
-// 			}
-// 		}
-// 		//ft_printf("char: %c, nb double quotes: %d, nb simple quotes: %d, first_quote: %d\n", str[i], nb_double_quotes, nb_simple_quotes, first_quote);
-// 	}
-// 	final_str[y] = '\0';
-// 	if (final_str[0])
-// 		ft_printf("%s", final_str);
-// 	exit(0);
-// }
-
-/////////////////////////////////////////////////////////////////////////////
-///////////////////////// END ECHO ////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
 
 /*
 **	Return the complete path of a file name or exit if malloc failed
@@ -172,187 +67,6 @@ static char	*get_complete_path(char *parent, char *name)
 	ft_strdel(&tmp);
 	return (result);
 }
-
-////////////////////////////////////////////////////////////////////////////////
-								//PARSING
-////////////////////////////////////////////////////////////////////////////////
-
-char		**ft_strsplit_parser2(char *str)
-{
-	int		i;
-	int		j;
-	int		y;
-	char	**result;
-	char	*line;
-	char	*tmp;
-
-
-	if (str == NULL)
-		return (NULL);
-	if (!(result = ft_memalloc(100000000)))
-		return (0);
-	i = -1;
-	j = 0;
-	while (str[++i])
-	{
-		//signal(SIGINT, catch_signal);
-		if (!(result[j] = ft_strnew(10000)))
-			return (0);
-		if (str[i] == ' ' || str[i] == '\t')
-			continue;
-		else if (str[i] == '\"')
-		{
-			// if (!(result[j] = ft_strnew(10000)))
-			// 	return (0);
-			y = 0;
-			while (str[i++])
-			{
-				if (str[i] == '\"')
-				{
-					//j++;
-					break;
-				}
-				result[j][y] = str[i];
-				y++;
-				if (str[i + 1] == 0)
-				{
-					ft_printf("termine ta quote putain>");
-					line = NULL;
-					if (read_prompt(0, &line) < 0)
-						error();
-					if (!line[0])
-						line[0] = '\n';
-					tmp = str;
-					str = ft_strjoin(tmp, "\n");
-					tmp = str;
-					str = ft_strjoin(tmp, line);
-					ft_strdel(&line);
-					continue;
-				}
-			}
-		}
-		else if (str[i] == '\'')
-		{
-			// if (!(result[j] = ft_strnew(10000)))
-			// 	return (0);
-			y = 0;
-			while (str[i++])
-			{
-				if (str[i] == '\'')
-				{
-					//j++;
-					break;
-				}
-				result[j][y] = str[i];
-				y++;
-				if (str[i + 1] == 0)
-				{
-					ft_printf("termine ta quote putain> ");
-					line = NULL;
-					if (read_prompt(0, &line) < 0)
-						error();
-					if (!line[0])
-						line[0] = '\n';
-					tmp = str;
-					str = ft_strjoin(tmp, "\n");
-					tmp = str;
-					str = ft_strjoin(tmp, line);
-					ft_strdel(&line);
-					continue;
-				}
-			}
-		}
-		// if (!(result[j] = ft_strnew(10000)))
-		// 	return (0);
-		y = 0;
-		while (str[i] != ' ' && str[i] != '\t' && str[i] && str[i] != '\"' && str[i] != '\'')
-		{
-			result[j][y] = str[i];
-			y++;
-			i++;
-		}
-		j++;
-	}
-	return (result);
-}
-
-// int		minishell_parser(char *input, char ****command)
-// {
-// 	int		i;
-// 	char	**commands;
-//
-// 	*command = ft_memalloc((ft_strlen(input) + 1) * 8);
-//
-// 	if (input[0] == 0)
-// 		return (FALSE);
-// 	if (!(commands = ft_strsplit(input, ';')))
-// 		return (FALSE);
-// 	i = -1;
-// 	while (commands[++i])
-// 	{
-// 		// if (!((*command)[i] = ft_strsplit(commands[i], ' ')))
-// 		if (!((*command)[i] = ft_strsplit_parser2(commands[i])))
-// 			return (FALSE);
-// 	}
-// 	(*command)[i] = NULL;
-//
-// 	// // DEBUG //
-// 	// i = -1;
-// 	// int y;
-// 	// ft_printf("DEBUG:\n");
-// 	// while (commands[++i])
-// 	// {
-// 	// 	y = -1;
-// 	// 	while ((*command)[i][++y])
-// 	// 	{
-// 	// 		ft_printf("commande %d = %s\n", y, (*command)[i][y]);
-// 	// 	}
-// 	// }
-// 	// // FIN DEBUG //
-//
-// 	// if (!(*command = ft_strsplit(input, ' ')))
-// 	// 	return (0);
-// 	return (1);
-// }
-
-////////////////////////////////////////////////////////////////////////////////
-								//FIN PARSING
-////////////////////////////////////////////////////////////////////////////////
-
-/*
-**	A proteger!!!!!!
-*/
-
-/*char		**get_my_env(char **environ)
-{
-	int		i;
-	char	**my_env = NULL;
-
-	i = -1;
-	while (environ[++i]);
-	my_env = ft_memalloc((i + 1) * sizeof(char *));
-	i = -1;
-	while (environ[++i])
-		my_env[i] = ft_strdup(environ[i]);
-	my_env[i] = NULL;
-	return (my_env);
-}*/
-//
-// t_varenv	*create_varenv(char *name, char *content)
-// {
-// 	t_varenv	*varenv;
-//
-// 	// Gerer l'erreur
-// 	if (!(varenv = ft_memalloc(sizeof(t_varenv *) + (sizeof(char *) * 2))))
-// 		error();
-// 	if (!(varenv->name = ft_strdup(name)))
-// 		error();
-// 	if (!content)
-// 		varenv->content = NULL;
-// 	else if (!(varenv->content = ft_strdup(content)))
-// 		error();
-// 	return (varenv);
-// }
 
 void		create_my_env(t_list **lst, char **environ)
 {
@@ -602,6 +316,10 @@ int			main(int ac, char **av, char **environ)
 		/*
 		**	PARSING
 		*/
+		if (!strrr)
+		{
+			exit(0);
+		}
 		if (!(minishell_parser(strrr, &command)))
 		{
 			ft_printf("%s\n", "Le parsing a fail");
@@ -627,11 +345,6 @@ int			main(int ac, char **av, char **environ)
 			if (ft_strcmp(command[y][0], "exit") == 0)
 			{
 				exit_builtin(command[y][1]);
-				// ft_printf("c'est ca degage\n");
-				// if (command[y][1])
-				// 	exit(ft_atoi(command[y][1]));
-				// else
-				// 	exit(EXIT_SUCCESS);
 			}
 			else if (ft_strcmp(command[y][0], "mypwd") == 0)
 			{
@@ -645,25 +358,7 @@ int			main(int ac, char **av, char **environ)
 			}
 			else if (ft_strcmp(command[y][0], "cd") == 0)
 			{
-				// char 	oldpwd[PATH_MAX + 1];
-				// // recupere le pwd
-				// getcwd(oldpwd, PATH_MAX + 1);
-				// if ((chdir(command[y][1])) < 0)
-				// 	ft_printf("chdir failed\n");
-				// else
-				// {
-				// 	if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
-				// 		ft_printf("OLDPWD not found\n");
-				// 	// PWD
-				// 	char 	pwd[PATH_MAX + 1];
-				// 	// recupere le pwd
-				// 	getcwd(pwd, PATH_MAX + 1);
-				// 	if (!(change_env_var(&g_env_lst, "PWD", pwd)))
-				// 		ft_printf("PWD not found\n");
-				// 	ft_printf("... moving to %s ....\n", command[y][1]);
-				// }
 				cd_builtin(command[y]);
-				// ft_strtabdel(&(command[y]));
 				ft_strtabdel(&g_env_tab);
 				env_lst_to_tab(&g_env_lst, &g_env_tab);
 				continue;
@@ -683,9 +378,6 @@ int			main(int ac, char **av, char **environ)
 			{
 				if (command[y][1])
 				{
-					// tmplst = ft_lstnew(NULL, sizeof(t_varenv *));
-					// tmplst->content = create_varenv(command[y][1], command[y][2]);
-					// ft_lstaddend(&g_env_lst, tmplst);
 					change_env_var(&g_env_lst, command[y][1], command[y][2]);
 					ft_strtabdel(&g_env_tab);
 					env_lst_to_tab(&g_env_lst, &g_env_tab);
@@ -711,23 +403,6 @@ int			main(int ac, char **av, char **environ)
 					if (command[y][1 + z])
 						ft_printf(" ");
 				}
-				// if (command[y][1])
-				// {
-				// 	g_pid = fork();
-				// 	if (g_pid == 0)
-				// 	{
-				// 		echo(&line[4]);
-				// 		//kill(g_pid, SIGTERM);
-				// 	}
-				// 	else if (g_pid < 0)
-				// 		ft_printf("fail\n");
-				// 	else if (g_pid > 0)
-				// 	{
-				// 		signal(SIGINT, catch_signal_kill);
-				// 		waitpid(g_pid, &status, 0);
-				// 	}
-				// 	//echo(&line[4]);
-				//}
 				ft_printf("\n");
 				continue;
 			}

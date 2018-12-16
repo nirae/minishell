@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:26:03 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 21:14:04 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:56:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,23 +144,11 @@ int		change_directory(char *pwd, char *oldpwd, int options)
 	return (TRUE);
 }
 
-int		cd_builtin(char **args)
+static char 	*get_pwd_for_cd(int pos_args, char **args)
 {
-	char 	*oldpwd = NULL;
-	char 	*pwd = NULL;
-	int		pos_args;
-	int		options;
-	t_varenv *tmp;
+	t_varenv	*tmp;
+	char 		*pwd;
 
-	options = 0;
-	pos_args = 0;
-	options_parser(args, &options, &pos_args);
-	if (!(tmp = get_env_var_by_name("PWD")))
-	{
-		change_env_var(&g_env_lst, "PWD", getcwd(NULL, sizeof(char *)));
-		tmp = get_env_var_by_name("PWD");
-	}
-	oldpwd = tmp->content;
 	if (pos_args == 0 || !args[pos_args] || !args[pos_args][0])
 	{
 		if (!(tmp = get_env_var_by_name("HOME")))
@@ -181,7 +169,29 @@ int		cd_builtin(char **args)
 	}
 	else
 		pwd = get_final_path(args[pos_args]);
-	if (!pwd || !change_directory(pwd, oldpwd, options))
+	return (pwd);
+}
+
+int		cd_builtin(char **args)
+{
+	char 	*oldpwd = NULL;
+	char 	*pwd = NULL;
+	int		pos_args;
+	int		options;
+	t_varenv *tmp;
+
+	options = 0;
+	pos_args = 0;
+	options_parser(args, &options, &pos_args);
+	if (!(tmp = get_env_var_by_name("PWD")))
+	{
+		change_env_var(&g_env_lst, "PWD", getcwd(NULL, sizeof(char *)));
+		tmp = get_env_var_by_name("PWD");
+	}
+	oldpwd = tmp->content;
+	if (!(pwd = get_pwd_for_cd(pos_args, args)))
+		return (FALSE);
+	if (!change_directory(pwd, oldpwd, options))
 	{
 		ft_strdel(&pwd);
 		return (FALSE);

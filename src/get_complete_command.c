@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/12 16:24:28 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:58:08 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int			get_complete_command(char **str)
 	int		i;
 	int		escape;
 
-	if (read_prompt(0, &line) < 0)
+	if (read_prompt(0, &line) <= 0)
+	// if (get_next_line(0, &line) <= 0)
 		return (0);
-		// exit(0);
 	// a proteger
 	final_str = ft_strdup(line);
 	ft_strdel(&line);
@@ -173,6 +173,7 @@ int			get_complete_command(char **str)
 	}
 	// a proteger
 	*str = ft_strdup(final_str);
+	ft_strdel(&final_str);
 	return (1);
 	// exit(1);
 }
