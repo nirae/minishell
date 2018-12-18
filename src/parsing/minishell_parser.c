@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/15 23:37:02 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 04:39:22 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 static	int	replace_tild(char **str)
 {
 	t_varenv	*myvarenv;
+	char		*tmp;
 
 	myvarenv = get_env_var_by_name("HOME");
 	if (myvarenv && myvarenv->content)
 	{
+		if ((*str)[1] == '/')
+			tmp = ft_strdup(&(*str)[1]);
+		else
+			tmp = "";
 		ft_strdel(str);
-		if (!(*str = ft_strdup(myvarenv->content)))
+		if (!(*str = ft_strjoin(myvarenv->content, tmp)))
 			return (FAIL_MALLOC);
 		return (TRUE);
 	}

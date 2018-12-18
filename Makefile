@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/16 23:51:07 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/18 02:29:02 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC		=	/usr/bin/gcc
 RM		=	/bin/rm
-CFLAGS	=	-Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 
@@ -36,8 +36,10 @@ SRCS	=	$(SRC)read_prompt.c												\
 			$(SRC)minishell_split.c											\
 			$(SRC)ft_strtabdel.c											\
 			$(SRC)ft_arraylen.c											\
+			$(SRC)exec_command.c											\
 			$(P)minishell_parser.c											\
 			$(ENV)get_env_var_by_name.c										\
+			$(ENV)env_lst_to_tab.c										\
 			$(ENV)change_env_var.c											\
 			$(ENV)add_env_var.c												\
 			$(ENV)create_varenv.c											\
@@ -45,6 +47,9 @@ SRCS	=	$(SRC)read_prompt.c												\
 			$(SRC)ft_split_escape.c											\
 			$(SRC)error.c													\
 			$(BT)exit_builtin.c												\
+			$(BT)echo_builtin.c												\
+			$(BT)env_builtin.c												\
+			$(BT)options.c												\
 			$(CD)get_final_path.c												\
 			$(CD)check_path_errors.c												\
 			$(CD)ft_stringtab_len.c												\

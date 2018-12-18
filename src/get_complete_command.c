@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 23:58:08 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 04:26:32 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int			get_complete_command(char **str)
 					break;
 				else if (!final_str[i])
 				{
-					ft_printf("termine ta quote putain>");
+					ft_printf(PROMPT_READ);
 					line = NULL;
 					if (read_prompt(0, &line) < 0)
 						return (0);
@@ -154,7 +154,7 @@ int			get_complete_command(char **str)
 					break;
 				else if (!final_str[i])
 				{
-					ft_printf("termine ta quote putain>");
+					ft_printf(PROMPT_READ);
 					line = NULL;
 					if (read_prompt(0, &line) < 0)
 						return (0);

@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 20:27:33 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 04:25:32 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include <fcntl.h>
 #include "errno.h"
 
-# define PROMPT "tape ta commande connard > "
-
+# define PROMPT "minishell $> "
+# define PROMPT_READ "$>"
 /*
 **	Pour my_errno
 */
@@ -41,8 +41,12 @@
 # define DOUBLE_QUOTE 	46
 
 # define OPTIONS_CD		"LP"
+# define OPTIONS_ENV	"i"
+# define OPTIONS_ECHO	"n"
 # define OPT_L 			(1 << 27)
 # define OPT_P 			(1 << 28)
+# define OPT_I			(1 << ('i' - 'a'))
+# define OPT_N			(1 << ('n' - 'a'))
 
 pid_t				g_pid;
 t_list				*g_env_lst;
@@ -61,6 +65,8 @@ typedef struct		s_varenv
 	char			*content;
 }					t_varenv;
 
+
+int			exec_command(char **command, char **env);
 int					read_prompt(const int fd, char **line);
 int					get_complete_command(char **str);
 // char 				**ft_split_escape(char *str, char sep);
@@ -81,6 +87,12 @@ char		**ft_strsplit_with_escape(char *str, char sep);
 **		BUILTINS
 */
 
+int 	echo_builtin(char **args);
+int		is_valid_option(char c, char *options);
+void	options_parser(char **args, int *options, int *pos_args,
+			int (*set_options)(char *, int *, int));
+
+int 	env_builtin(char **args);
 void		exit_builtin(char *arg);
 
 /*
@@ -98,8 +110,8 @@ int		cd_builtin(char **args);
 /*
 **	ENVIRONMENT
 */
-
-int		add_env_var(char *name, char *content);
+void		env_lst_to_tab(t_list **lst, char ***tab);
+int		add_env_var(t_list **lst, char *name, char *content);
 t_varenv	*create_varenv(char *name, char *content);
 void		del_env_var(void *content, size_t size);
 int			change_env_var(t_list **lst, char *name, char *newcontent);
