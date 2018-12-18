@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/18 02:29:02 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/18 22:33:44 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC		=	/usr/bin/gcc
 RM		=	/bin/rm
-CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g3 #-fsanitize=address
 
 # Directories
 
@@ -26,53 +26,64 @@ P		=	$(SRC)parsing/
 ENV		=	$(SRC)environment/
 BT		=	$(SRC)builtins/
 CD		=	$(BT)cd/
+ENVBT	=	$(BT)env/
 
 #  Files
 
 HFILES	=	$(H)minishell.h
 MAIN	=	$(SRC)main.c
-SRCS	=	$(SRC)read_prompt.c												\
-			$(SRC)get_complete_command.c									\
-			$(SRC)minishell_split.c											\
+SRCS	=	$(MAIN)															\
+			$(P)read_prompt.c												\
+			$(P)get_complete_command.c										\
+			$(P)replace_dollar.c											\
 			$(SRC)ft_strtabdel.c											\
-			$(SRC)ft_arraylen.c											\
 			$(SRC)exec_command.c											\
 			$(P)minishell_parser.c											\
 			$(ENV)get_env_var_by_name.c										\
-			$(ENV)env_lst_to_tab.c										\
+			$(ENV)env_lst_to_tab.c											\
+			$(ENV)env_tab_to_lst.c											\
 			$(ENV)change_env_var.c											\
+			$(ENV)remove_env_var.c											\
 			$(ENV)add_env_var.c												\
 			$(ENV)create_varenv.c											\
 			$(ENV)del_env_var.c												\
-			$(SRC)ft_split_escape.c											\
+			$(P)ft_strsplit_whitespace.c									\
 			$(SRC)error.c													\
 			$(BT)exit_builtin.c												\
+			$(BT)setenv_builtin.c											\
+			$(BT)unsetenv_builtin.c											\
 			$(BT)echo_builtin.c												\
-			$(BT)env_builtin.c												\
-			$(BT)options.c												\
-			$(CD)get_final_path.c												\
-			$(CD)check_path_errors.c												\
-			$(CD)ft_stringtab_len.c												\
-			$(CD)ft_strjointab.c												\
-			$(CD)ft_realloc_addend_tab.c												\
-			$(CD)build_pwd_tab.c												\
+			$(ENVBT)env_builtin.c											\
+			$(ENVBT)ft_lstcpy.c												\
+			$(ENVBT)manage_envvar_args.c									\
+			$(BT)options.c													\
+			$(BT)manage_builtins.c											\
+			$(CD)get_final_path.c											\
+			$(CD)check_path_errors.c										\
+			$(CD)ft_stringtab_len.c											\
+			$(CD)ft_strjointab.c											\
+			$(CD)ft_realloc_addend_tab.c									\
+			$(CD)build_pwd_tab.c											\
 			$(CD)cd_builtin.c
 
 OBJ		=	$(patsubst %.c,%.o,$(SRCS))
-# Name
+
+# Name of the project
 
 NAME	=	minishell
 
 .PHONY: all clean fclean re
 
+# Rules
+
 all:		$(NAME)
 		@true
 
-$(NAME):	$(OBJ) $(MAIN) $(HFILES) $(LIBFT) Makefile
+$(NAME):	Makefile $(OBJ) $(MAIN) $(HFILES) $(LIBFT)
 		@echo "Compiling Libft ..."
 		@make -C $(LIBFT)
 		@echo "Building $(NAME) ..."
-		@$(CC) $(CFLAGS) $(MAIN) $(OBJ) -I$(H) -I$(ILIBFT) -L$(LIBFT) -lft -o $(NAME)
+		@$(CC) $(CFLAGS) $(OBJ) -I$(H) -I$(ILIBFT) -L$(LIBFT) -lft -o $(NAME)
 		@echo "I'm READY"
 
 %.o: 		%.c

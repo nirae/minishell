@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/14 08:47:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/11/19 20:07:14 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 23:18:47 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int				get_next_line(const int fd, char **line)
 	int				n_lus;
 	char			*temp;
 
-	if (BUFF_SIZE <= 0 | fd == 1 | (n_lus = read(fd, "", 0)) == -1)
+	if (BUFF_SIZE <= 0 || fd == 1 || (n_lus = read(fd, "", 0)) == -1)
 		return (-1);
 	if (!(buff = ft_strnew(BUFF_SIZE)))
 		return (-1);

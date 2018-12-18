@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_big_string.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndubouil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 20:00:04 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/24 20:08:40 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 23:21:15 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,8 @@ static int		print_string_with_precision(t_env *env, int len)
 {
 	int				i;
 	char			result[5];
-	int				big_len;
 
 	i = -1;
-	big_len = 0;
 	if (env->flags.precision >= 0)
 	{
 		if (!(precision_pos(env, len)))

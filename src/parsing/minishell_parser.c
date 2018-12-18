@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 04:39:22 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/18 19:09:26 by Nico             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static	int	replace_tild(char **str)
 			tmp = "";
 		ft_strdel(str);
 		if (!(*str = ft_strjoin(myvarenv->content, tmp)))
-			return (FAIL_MALLOC);
+			return (FALSE);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -40,42 +40,32 @@ static	int split_each_commands(char **commands, char ****commands_tab)
 	i = -1;
 	while (commands[++i])
 	{
-		if (!((*commands_tab)[i] = minishell_split(commands[i])))
-			return (FAIL_);
+		if (!((*commands_tab)[i] = ft_strsplit_whitespace(commands[i])))
+			return (FALSE);
 		y = -1;
 		while ((*commands_tab)[i][++y])
 		{
 			if ((*commands_tab)[i][y][0] == '~')
 				if (!(replace_tild(&(*commands_tab)[i][y])))
-					return (FAIL_);
+					return (FALSE);
 		}
 	}
 	(*commands_tab)[i] = NULL;
 	return (TRUE);
 }
 
-// static	void free_separated_commands(char ***tab)
-// {
-// 	int		i;
-//
-// 	i = -1;
-// 	while ((*tab)[++i])
-// 		ft_strdel(&(*tab)[i]);
-// }
-
 int		minishell_parser(char *input, char ****commands_tab)
 {
 	char	**separated_commands;
 
-	*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *));
+	if (!(*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *))))
+		return (FALSE);
 	if (!input[0])
-		return (TRUE);
-	// ft_printf("count words escape = %d\n", ft_count_words_escape(input, ';'));
-	if (!(separated_commands = ft_strsplit_with_escape(input, ';')))
-		return (FAIL_);
+		return (FALSE);
+	if (!(separated_commands = ft_strsplit(input, ';')))
+		return (FALSE);
 	if (!(split_each_commands(separated_commands, commands_tab)))
-		return (FAIL_);
-
+		return (FALSE);
 	/*
 	** DEBUG
 	*/
@@ -94,6 +84,5 @@ int		minishell_parser(char *input, char ****commands_tab)
 	** FIN DEBUG
 	*/
 	ft_strtabdel(&separated_commands);
-	// free_separated_commands(&separated_commands);
 	return (TRUE);
 }
