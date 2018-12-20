@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 00:36:16 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:42:12 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 05:58:13 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ int				echo_builtin(char **args)
 	options = 0;
 	options_parser(args, &options, &pos_args, set_options);
 	z = (pos_args - 1);
+	if (z < 0 && (options & OPT_N))
+		z = 1;
+	else if (z < 0)
+		z = 0;
 	while (args[1 + z])
 	{
 		ft_printf("%s", args[1 + z]);

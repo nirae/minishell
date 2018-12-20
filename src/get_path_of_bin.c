@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 03:09:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 04:05:46 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 05:37:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char		**get_env_paths(t_list *lst)
 	char	**env_paths;
 
 	tmp = lst;
-	while (lst)
+	while (tmp)
 	{
 		if (ft_strcmp((((t_varenv *)(tmp->content))->name), "PATH") == 0)
 			break ;
@@ -121,12 +121,12 @@ char			*get_path_of_bin(char *path)
 	char		**env_paths;
 	struct stat	st;
 
+	stat(path, &st);
 	if (access(path, F_OK) == 0)
 	{
 		if (access(path, X_OK) == 0)
 		{
-			stat(path, &st);
-			if (S_ISREG(st.st_mode) && (path[0] == '.' && path[1] == '/'))
+			if (S_ISREG(st.st_mode) && (path[0] == '.' || path[0] == '/'))
 				return (path);
 		}
 		else
@@ -138,7 +138,7 @@ char			*get_path_of_bin(char *path)
 	env_paths = get_env_paths(g_env_lst);
 	if (!env_paths)
 	{
-		ft_printf("minishell: PATH not set\n");
+		ft_printf("minishell: command not found: %s\n", path);
 		return (NULL);
 	}
 	return (search_path(&env_paths, path));
