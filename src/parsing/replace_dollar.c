@@ -6,7 +6,7 @@
 /*   By: Nico <Nico@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 19:00:40 by Nico              #+#    #+#             */
-/*   Updated: 2018/12/18 19:01:15 by Nico             ###   ########.fr       */
+/*   Updated: 2018/12/20 00:35:39 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,13 @@ int			replace_dollar(char **final_str, int *i)
 	end = ft_strdup(&result[*i + ft_strlen(var) + 1]);
 	result = ft_strjoin(beg, end);
 	*i = ft_strlen(beg) - 1;
+	ft_strdel(&var);
 	ft_strdel(&beg);
 	ft_strdel(&end);
 	if (result)
+	{
+		ft_strdel(final_str);
 		*final_str = result;
+	}
 	return (TRUE);
 }

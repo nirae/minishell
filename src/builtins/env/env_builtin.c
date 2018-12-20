@@ -6,13 +6,13 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 16:09:13 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 22:58:24 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:39:13 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	malloc_error_set_errno(void)
+static int		malloc_error_set_errno(void)
 {
 	g_my_errno = FAIL_MALLOC;
 	return (FALSE);
@@ -36,7 +36,7 @@ static int		set_options(char *ops, int *options, int pos)
 	return (TRUE);
 }
 
-static void	manage_exec_args(char **args, char **env_tab, int pos_args)
+static void		manage_exec_args(char **args, char **env_tab, int pos_args)
 {
 	int		i;
 
@@ -50,15 +50,16 @@ static void	manage_exec_args(char **args, char **env_tab, int pos_args)
 		i = -1;
 		while (env_tab[++i])
 			ft_printf("%s\n", env_tab[i]);
+		ft_strtabdel(&env_tab);
 	}
 }
 
-int 	env_builtin(char **args)
+int				env_builtin(char **args)
 {
-	int		pos_args;
-	int		options;
-	t_list *env_lst_cpy;
-	char	**env_tab;
+	int			pos_args;
+	int			options;
+	t_list		*env_lst_cpy;
+	char		**env_tab;
 
 	options = 0;
 	pos_args = 0;

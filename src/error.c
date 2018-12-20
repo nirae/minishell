@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/15 00:19:30 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 21:29:15 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/19 22:49:19 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	error(void)
 {
 	ft_printf("minishell: critical fail\n");
-	exit_builtin("1");
+	exit_builtin("1", NULL);
 }

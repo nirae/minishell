@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 19:09:26 by Nico             ###   ########.fr       */
+/*   Updated: 2018/12/20 00:38:28 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,7 @@ static	int split_each_commands(char **commands, char ****commands_tab)
 		while ((*commands_tab)[i][++y])
 		{
 			if ((*commands_tab)[i][y][0] == '~')
-				if (!(replace_tild(&(*commands_tab)[i][y])))
-					return (FALSE);
+				replace_tild(&(*commands_tab)[i][y]);
 		}
 	}
 	(*commands_tab)[i] = NULL;
@@ -58,7 +57,8 @@ int		minishell_parser(char *input, char ****commands_tab)
 {
 	char	**separated_commands;
 
-	if (!(*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *))))
+	if (!(*commands_tab = ft_memalloc((ft_strlen(input)) * sizeof(char *))))
+	// if (!(*commands_tab = ft_memalloc(sizeof(char *) * 2)))
 		return (FALSE);
 	if (!input[0])
 		return (FALSE);

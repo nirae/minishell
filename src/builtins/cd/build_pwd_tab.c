@@ -6,19 +6,18 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:34:08 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 19:42:10 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:28:26 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	dotdot_case(char ***pwd_tab, int *pwd_tab_len)
+static int		dotdot_case(char ***pwd_tab, int *pwd_tab_len)
 {
 	if (*pwd_tab_len <= 0)
-		(*pwd_tab_len) = 1;
-	ft_strdel(&(*pwd_tab)[(*pwd_tab_len)]);
+		return (TRUE);
 	ft_strdel(&(*pwd_tab)[(*pwd_tab_len) - 1]);
-	(*pwd_tab)[(*pwd_tab_len )- 1] = NULL;
+	(*pwd_tab)[(*pwd_tab_len) - 1] = NULL;
 	if (!(*pwd_tab)[0])
 	{
 		if (!(ft_realloc_addend_tab(pwd_tab, "")))
@@ -29,13 +28,13 @@ static int	dotdot_case(char ***pwd_tab, int *pwd_tab_len)
 	return (TRUE);
 }
 
-static int	malloc_error_set_errno(void)
+static int		malloc_error_set_errno(void)
 {
 	g_my_errno = FAIL_MALLOC;
 	return (FALSE);
 }
 
-static int	check_validity_path(char ***pwd_tab)
+static int		check_validity_path(char ***pwd_tab)
 {
 	char *tmp;
 
@@ -51,7 +50,7 @@ static int	check_validity_path(char ***pwd_tab)
 	return (TRUE);
 }
 
-int	build_pwd_tab(char ***arg_tab, char ***pwd_tab, int pwd_tab_len)
+int				build_pwd_tab(char ***arg_tab, char ***pwd_tab, int pwd_tab_len)
 {
 	int		i;
 

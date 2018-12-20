@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:39:34 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 19:39:58 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:35:52 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ char	*ft_strjointab(char **tab, char sep)
 {
 	int		i;
 	int		len;
-	char 	*result;
-	char 	sepp[2];
+	char	*result;
+	char	sepp[2];
 
 	i = -1;
 	len = 0;

@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/18 22:33:44 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/20 02:23:54 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRCS	=	$(MAIN)															\
 			$(BT)options.c													\
 			$(BT)manage_builtins.c											\
 			$(CD)get_final_path.c											\
+			$(CD)get_pwd_for_cd.c											\
 			$(CD)check_path_errors.c										\
 			$(CD)ft_stringtab_len.c											\
 			$(CD)ft_strjointab.c											\

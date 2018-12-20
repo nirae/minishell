@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:41:33 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 19:41:42 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:34:49 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 int		ft_realloc_addend_tab(char ***tab, char *elem)
 {
 	int		i;
-	char 	**tmp;
+	char	**tmp;
 
 	if (*tab == NULL || !elem)
 		return (FALSE);
 	i = -1;
-	while ((*tab)[++i]);
+	while ((*tab)[++i])
+		;
 	if (!(tmp = ft_memalloc((i + 2) * sizeof(char *))))
 		return (FALSE);
 	i = -1;
@@ -30,11 +31,7 @@ int		ft_realloc_addend_tab(char ***tab, char *elem)
 	if (!(tmp[i] = ft_strdup(elem)))
 		return (FALSE);
 	tmp[i + 1] = NULL;
-	i = -1;
-	while ((*tab)[++i])
-		ft_strdel(&(*tab)[i]);
-	ft_strdel(&(*tab)[i]);
-	ft_memdel((void **)*tab);
+	ft_strtabdel(tab);
 	*tab = tmp;
 	return (TRUE);
 }

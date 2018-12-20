@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 22:31:59 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 22:42:44 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:41:19 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,46 +33,47 @@ static int		is_equal_sign(char *arg, t_list **result)
 	return (TRUE);
 }
 
-static t_list	*get_env_var_in_args(char **args, int *pos_args)
+static int		get_env_var_in_args(char **args, int *pos_args, t_list **lst)
 {
 	int		i;
-	t_list	*result;
 
-	result = NULL;
+	*lst = NULL;
 	i = -1;
 	while (args[++i])
 	{
 		if (ft_strchr(args[i], '='))
 		{
-			if (!is_equal_sign(args[i], &result))
-				return (NULL);
+			if (!is_equal_sign(args[i], lst))
+				return (FALSE);
 			(*pos_args)++;
 		}
 		else
-			break;
+			break ;
 	}
-	return (result);
+	return (TRUE);
 }
 
-int	manage_envvar_args(int options, t_list **env_lst_cpy, char **args,
-	int *pos_args)
+int				manage_envvar_args(int options, t_list **env_lst_cpy,
+					char **args, int *pos_args)
 {
 	t_list	*env_var_args;
+	t_list	*tmp;
 
 	env_var_args = NULL;
 	if (options & OPT_I)
 		*env_lst_cpy = NULL;
 	else if (!(ft_lstcpy(g_env_lst, env_lst_cpy)))
 		return (FALSE);
-	if (!(env_var_args = get_env_var_in_args(&args[*pos_args], pos_args)))
+	if (!get_env_var_in_args(&args[*pos_args], pos_args, &env_var_args))
 		return (FALSE);
-	while (env_var_args)
+	tmp = env_var_args;
+	while (tmp)
 	{
 		if (!change_env_var(env_lst_cpy
-				, ((t_varenv*)(env_var_args->content))->name
-				, ((t_varenv*)(env_var_args->content))->content))
+				, ((t_varenv*)(tmp->content))->name
+				, ((t_varenv*)(tmp->content))->content))
 			return (FALSE);
-		env_var_args = env_var_args->next;
+		tmp = tmp->next;
 	}
 	ft_lstdel(&env_var_args, del_env_var);
 	return (TRUE);

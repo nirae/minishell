@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 22:29:33 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 22:29:53 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:40:08 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_list		*ft_lstcpy(t_list *src, t_list **dest)
 {
 	t_list		*tmp;
 	t_list		*tmplst;
-	char *name;
-	char *content;
+	char		*name;
+	char		*content;
 
 	(*dest) = NULL;
 	tmp = src;

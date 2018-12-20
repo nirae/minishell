@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 02:21:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 03:37:24 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:05:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ static char 	*get_path_of_bin(char *path)
 	char **env_paths;
 	int i;
 	struct stat st;
+	char *cmp_path;
 
 	if (access(path, F_OK) == 0)
 	{
@@ -100,23 +101,32 @@ static char 	*get_path_of_bin(char *path)
 	i = -1;
 	while (env_paths[++i])
 	{
-		if (access(get_complete_path(env_paths[i], path), F_OK) == 0)
+		cmp_path = get_complete_path(env_paths[i], path);
+		if (access(cmp_path, F_OK) == 0)
 		{
-			if (access(get_complete_path(env_paths[i], path), X_OK) == 0)
+			if (access(cmp_path, X_OK) == 0)
 			{
-				stat(get_complete_path(env_paths[i], path), &st);
+				stat(cmp_path, &st);
 				if (S_ISREG(st.st_mode))
-					return (ft_strdup(get_complete_path(env_paths[i], path)));
+				{
+					ft_strtabdel(&env_paths);
+					return (cmp_path);
+				}
 				else if (S_ISDIR(st.st_mode) && path[0])
 				{
 					ft_printf("minishell: %s: is a directory\n", path);
+					ft_strtabdel(&env_paths);
+					// ft_strdel(&cmp_path);
 					return (NULL);
 				}
-				return (ft_strdup(get_complete_path(env_paths[i], path)));
+				ft_strtabdel(&env_paths);
+				return (cmp_path);
 			}
 			else
 			{
 				ft_printf("minishell: %s: Permission denied\n", path);
+				ft_strtabdel(&env_paths);
+				ft_strdel(&cmp_path);
 				return (NULL);
 			}
 		}
@@ -126,10 +136,14 @@ static char 	*get_path_of_bin(char *path)
 			if (!env_paths[i + 1])
 			{
 				ft_printf("minishell: command not found: %s\n", path);
+				ft_strtabdel(&env_paths);
+				ft_strdel(&cmp_path);
 				break;
 			}
 		}
+		ft_strdel(&cmp_path);
 	}
+	ft_strtabdel(&env_paths);
 	return (NULL);
 }
 
@@ -150,5 +164,6 @@ int			exec_command(char **command, char **env)
 		signal(SIGINT, catch_signal_kill);
 		waitpid(g_pid, &status, 0);
 	}
+	ft_strdel(&final_path);
 	return (TRUE);
 }

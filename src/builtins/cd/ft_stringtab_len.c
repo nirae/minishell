@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:38:19 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/16 19:38:38 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:35:25 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int		ft_stringtab_len(char **tab)
 	int		i;
 
 	i = -1;
-	while (tab[++i]);
+	while (tab[++i])
+		;
 	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: Nico <Nico@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 18:10:34 by Nico              #+#    #+#             */
-/*   Updated: 2018/12/18 18:16:25 by Nico             ###   ########.fr       */
+/*   Updated: 2018/12/19 21:03:30 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char		**ft_strsplit_whitespace(char const *s)
 	while (i < count_words((char *)s))
 	{
 		k = 0;
-		if (!(tab[i] = ft_strnew(count_letters((char *)&s[j]) + 1)))
+		if (!(tab[i] = ft_strnew(count_letters((char *)&s[j]))))
 			return (0);
 		while (s[j] == ' ' || s[j] == '\t' || s[j] == '\n')
 			j++;

@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 16:23:38 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 21:56:03 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:43:35 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	options_parser(char **args, int *options, int *pos_args,
 		else
 		{
 			*pos_args = i;
-			break;
+			break ;
 		}
 	}
 }

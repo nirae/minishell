@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 23:41:03 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:27:03 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ typedef struct		s_varenv
 	char			*content;
 }					t_varenv;
 
-
 int					exec_command(char **command, char **env);
 int					read_prompt(const int fd, char **line);
 int					get_complete_command(char **str);
@@ -69,15 +68,15 @@ char				**ft_strsplit_whitespace(char const *s);
 **		BUILTINS
 */
 
-int 				unsetenv_builtin(char **args);
-int					manage_builtins(char **command);
-int 				echo_builtin(char **args);
+int					unsetenv_builtin(char **args);
+int					manage_builtins(char **command, char ****commands);
+int					echo_builtin(char **args);
 int					is_valid_option(char c, char *options);
 void				options_parser(char **args, int *options, int *pos_args,
 						int (*set_options)(char *, int *, int));
-int 				env_builtin(char **args);
-int 				setenv_builtin(char **args);
-void				exit_builtin(char *arg);
+int					env_builtin(char **args);
+int					setenv_builtin(char **args);
+void				exit_builtin(char *arg, char ****commands);
 
 /*
 **	ENV
@@ -91,11 +90,12 @@ int					manage_envvar_args(int options, t_list **env_lst_cpy,
 **	CD
 */
 
+char				*get_pwd_for_cd(int pos_args, char **args);
 int					ft_realloc_addend_tab(char ***tab, char *elem);
 char				*ft_strjointab(char **tab, char sep);
 int					ft_stringtab_len(char **tab);
 int					check_path_errors(char *path);
-char				*get_final_path(char *path);
+char				*get_final_path(char **path);
 int					build_pwd_tab(char ***arg_tab, char ***pwd_tab,
 						int pwd_tab_len);
 int					cd_builtin(char **args);

@@ -6,15 +6,15 @@
 /*   By: Nico <Nico@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 21:03:19 by Nico              #+#    #+#             */
-/*   Updated: 2018/12/18 21:05:31 by Nico             ###   ########.fr       */
+/*   Updated: 2018/12/20 02:43:58 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int 	setenv_builtin(char **args)
+int		setenv_builtin(char **args)
 {
-	int i;
+	int		i;
 
 	if (args[1])
 		change_env_var(&g_env_lst, args[1], args[2]);
