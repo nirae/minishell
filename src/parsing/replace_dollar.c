@@ -6,13 +6,13 @@
 /*   By: Nico <Nico@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 19:00:40 by Nico              #+#    #+#             */
-/*   Updated: 2018/12/20 00:35:39 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:56:48 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	count_letters(char *str)
+static int		count_letters(char *str)
 {
 	int i;
 	int result;
@@ -38,7 +38,7 @@ static char		*one_more_split(char *s)
 	j = 0;
 	if (!(result = ft_strnew(count_letters(s) + 1)))
 		return (NULL);
-	if (s[i] == ' ' || !s[i] || s[i] == '\n'|| s[i] == '\t')
+	if (s[i] == ' ' || !s[i] || s[i] == '\n' || s[i] == '\t')
 		return (NULL);
 	while (s[i] != ' ' && s[i] != ';' && (s[i] != '$' || s[i - 1] == '$')
 		&& s[i])
@@ -53,13 +53,22 @@ static char		*get_beg_of_str(char *str, int i)
 	return (ft_strdup(str));
 }
 
-int			replace_dollar(char **final_str, int *i)
+static void		return_of_replace(char **final_str, char *result)
 {
-	char *var;
-	char *beg;
-	char *end;
-	char *tmp;
-	char *result;
+	if (result)
+	{
+		ft_strdel(final_str);
+		*final_str = result;
+	}
+}
+
+int				replace_dollar(char **final_str, int *i)
+{
+	char	*var;
+	char	*beg;
+	char	*end;
+	char	*tmp;
+	char	*result;
 
 	result = *final_str;
 	if (!(var = one_more_split(&result[*i + 1])))
@@ -77,10 +86,6 @@ int			replace_dollar(char **final_str, int *i)
 	ft_strdel(&var);
 	ft_strdel(&beg);
 	ft_strdel(&end);
-	if (result)
-	{
-		ft_strdel(final_str);
-		*final_str = result;
-	}
+	return_of_replace(final_str, result);
 	return (TRUE);
 }

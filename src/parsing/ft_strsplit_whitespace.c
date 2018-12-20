@@ -6,7 +6,7 @@
 /*   By: Nico <Nico@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 18:10:34 by Nico              #+#    #+#             */
-/*   Updated: 2018/12/19 21:03:30 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:46:42 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_is_ok(char c)
 	return (0);
 }
 
-static int			count_words(char *str)
+static int	count_words(char *str)
 {
 	if (*str == '\0')
 		return (0);

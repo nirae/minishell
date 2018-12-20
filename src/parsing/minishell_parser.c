@@ -6,13 +6,13 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 00:38:28 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:47:31 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	int	replace_tild(char **str)
+static int	replace_tild(char **str)
 {
 	t_varenv	*myvarenv;
 	char		*tmp;
@@ -32,7 +32,7 @@ static	int	replace_tild(char **str)
 	return (FALSE);
 }
 
-static	int split_each_commands(char **commands, char ****commands_tab)
+static int	split_each_commands(char **commands, char ****commands_tab)
 {
 	int			i;
 	int			y;
@@ -53,12 +53,11 @@ static	int split_each_commands(char **commands, char ****commands_tab)
 	return (TRUE);
 }
 
-int		minishell_parser(char *input, char ****commands_tab)
+int			minishell_parser(char *input, char ****commands_tab)
 {
 	char	**separated_commands;
 
 	if (!(*commands_tab = ft_memalloc((ft_strlen(input)) * sizeof(char *))))
-	// if (!(*commands_tab = ft_memalloc(sizeof(char *) * 2)))
 		return (FALSE);
 	if (!input[0])
 		return (FALSE);
@@ -66,23 +65,6 @@ int		minishell_parser(char *input, char ****commands_tab)
 		return (FALSE);
 	if (!(split_each_commands(separated_commands, commands_tab)))
 		return (FALSE);
-	/*
-	** DEBUG
-	*/
-	// int i = -1;
-	// int y;
-	// ft_printf("DEBUG:\n");
-	// while (separated_commands[++i])
-	// {
-	// 	y = -1;
-	// 	while ((*commands_tab)[i][++y])
-	// 	{
-	// 		ft_printf("commande %d, arg %d = %s\n", i, y, (*commands_tab)[i][y]);
-	// 	}
-	// }
-	/*
-	** FIN DEBUG
-	*/
 	ft_strtabdel(&separated_commands);
 	return (TRUE);
 }
