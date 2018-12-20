@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:47:31 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 03:44:22 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ static int	split_each_commands(char **commands, char ****commands_tab)
 	while (commands[++i])
 	{
 		if (!((*commands_tab)[i] = ft_strsplit_whitespace(commands[i])))
+		{
 			return (FALSE);
+		}
 		y = -1;
 		while ((*commands_tab)[i][++y])
 		{

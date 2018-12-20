@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/15 17:06:27 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/19 23:53:35 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 03:56:36 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	ft_strtabdel(char ***tab)
 {
-	int 	i;
+	int		i;
 
-	if (!*tab)
-		return;
+	if (!*tab || !(*tab)[0])
+		return ;
 	i = -1;
 	while ((*tab)[++i])
 		ft_strdel(&(*tab)[i]);

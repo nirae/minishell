@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 00:57:02 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 04:07:16 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static void	catch_signal(int signal)
 	}
 }
 
-void			create_minimal_env(void)
+void		create_minimal_env(void)
 {
 	change_env_var(&g_env_lst, "SHLVL", "0");
 	change_env_var(&g_env_lst, "PWD", getcwd(NULL, sizeof(char *)));
 	change_env_var(&g_env_lst, "PATH", "/bin:/usr/bin");
 }
 
-void 		manage_each_command(char ****commands)
+void		manage_each_command(char ****commands)
 {
 	int		i;
 
@@ -41,11 +41,11 @@ void 		manage_each_command(char ****commands)
 	}
 }
 
-void 		ft_minishell(void)
+void		ft_minishell(void)
 {
 	char	*complete_cmd;
 	char	***commands;
-	int 	i;
+	int		i;
 
 	commands = NULL;
 	while (666)

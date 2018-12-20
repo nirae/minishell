@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 16:09:13 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:39:13 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 04:16:13 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,23 @@ static int		set_options(char *ops, int *options, int pos)
 	return (TRUE);
 }
 
-static void		manage_exec_args(char **args, char **env_tab, int pos_args)
+static void		manage_exec_args(char **args, char ***env_tab, int pos_args)
 {
 	int		i;
 
 	if (args[pos_args])
 	{
-		exec_command(&args[pos_args], env_tab);
-		ft_strtabdel(&env_tab);
+		exec_command(&args[pos_args], *env_tab);
+		ft_strtabdel(env_tab);
+		ft_memdel((void **)env_tab);
 	}
 	else
 	{
 		i = -1;
-		while (env_tab[++i])
-			ft_printf("%s\n", env_tab[i]);
-		ft_strtabdel(&env_tab);
+		while ((*env_tab)[++i])
+			ft_printf("%s\n", (*env_tab)[i]);
+		ft_strtabdel(env_tab);
+		ft_memdel((void **)env_tab);
 	}
 }
 
@@ -73,7 +75,7 @@ int				env_builtin(char **args)
 		pos_args++;
 	if (!env_lst_to_tab(&env_lst_cpy, &env_tab))
 		return (malloc_error_set_errno());
-	manage_exec_args(args, env_tab, pos_args);
+	manage_exec_args(args, &env_tab, pos_args);
 	ft_lstdel(&env_lst_cpy, del_env_var);
 	return (TRUE);
 }
