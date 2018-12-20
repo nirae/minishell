@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:37:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/19 17:38:14 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:58:25 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	update_env_var(t_list **lst, char *name, char *newcontent)
 	while (tmp)
 	{
 		if (ft_strequ((((t_varenv *)((tmp)->content))->name), name))
-			break;
+			break ;
 		if ((tmp)->next == NULL)
 		{
 			if (!add_env_var(lst, name, newcontent))

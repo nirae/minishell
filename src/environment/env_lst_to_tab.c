@@ -6,18 +6,18 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 02:28:18 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 21:53:23 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 02:59:40 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void 	del_tab(char ***tab)
+static void		del_tab(char ***tab)
 {
 	int		i;
 
 	i = 0;
-	while((*tab)[i++])
+	while ((*tab)[i++])
 		ft_strdel(&(*tab)[i]);
 	*tab = NULL;
 }
@@ -48,7 +48,7 @@ static int		cpy_tab(t_list *lst, char ***tab)
 	return (TRUE);
 }
 
-int		env_lst_to_tab(t_list **lst, char ***tab)
+int				env_lst_to_tab(t_list **lst, char ***tab)
 {
 	t_list	*node;
 
@@ -56,7 +56,7 @@ int		env_lst_to_tab(t_list **lst, char ***tab)
 		del_tab(tab);
 	node = *lst;
 	if (*tab == NULL)
-		if (!(*tab = (char **)ft_memalloc(sizeof(char *) * (ft_lstlen(*lst) + 1))))
+		if (!(*tab = ft_memalloc(sizeof(char *) * (ft_lstlen(*lst) + 1))))
 			return (FALSE);
 	if (node != NULL)
 		if (!cpy_tab(node, tab))

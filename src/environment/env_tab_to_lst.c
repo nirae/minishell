@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 21:15:34 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 21:15:37 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/20 03:00:14 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		env_tab_to_lst(t_list **lst, char **environ)
 		if (!(tmplst = ft_lstnew(NULL, sizeof(t_varenv *))))
 			return (FALSE);
 		if (!(env = ft_strsplit(environ[i], '=')))
-		 	return (FALSE);
+			return (FALSE);
 		pos = ft_strpos(environ[i], '=');
 		tmplst->content = create_varenv(env[0], &environ[i][pos + 1]);
 		if (!(*lst))
