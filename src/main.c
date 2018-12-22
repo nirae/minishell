@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 04:07:16 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/22 23:20:35 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,9 @@ void		ft_minishell(void)
 
 int			main(int ac, char **av, char **environ)
 {
-	int		shlvl;
-	char	*tmp;
+	int			shlvl;
+	char		*tmp;
+	t_varenv	*envshlvl;
 
 	(void)av;
 	if (ac > 1)
@@ -81,7 +82,10 @@ int			main(int ac, char **av, char **environ)
 	g_my_errno = 0;
 	if (!env_tab_to_lst(&g_env_lst, environ))
 		create_minimal_env();
-	shlvl = ft_atoi(get_env_var_by_name("SHLVL")->content);
+	if (!(envshlvl = get_env_var_by_name("SHLVL")))
+		shlvl = 0;
+	else
+		shlvl = ft_atoi(envshlvl->content);
 	tmp = ft_itoa(shlvl + 1);
 	change_env_var(&g_env_lst, "SHLVL", tmp);
 	ft_strdel(&tmp);

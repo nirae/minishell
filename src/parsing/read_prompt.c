@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:42:39 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:48:05 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/22 23:04:41 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int		final_return(char **s, int n_lus)
 {
-	int		i;
 	char	*temp;
 
 	if (n_lus == 0 && !(*s))
@@ -22,10 +21,6 @@ static int		final_return(char **s, int n_lus)
 		ft_strdel(s);
 		return (0);
 	}
-	if (ft_strpos(*s, '\n') == (int)ft_strlen(*s))
-		i = 0;
-	else
-		i = 1;
 	temp = *s;
 	*s = ft_strsub(temp, ft_strpos(temp, '\n'), (int)ft_strlen(temp));
 	ft_strdel(&temp);

@@ -6,7 +6,7 @@
 #    By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/30 19:48:44 by ndubouil          #+#    #+#              #
-#    Updated: 2018/12/20 05:59:45 by ndubouil         ###   ########.fr        #
+#    Updated: 2018/12/22 22:54:15 by ndubouil         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 
 CC		=	/usr/bin/gcc
 RM		=	/bin/rm
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g3 -fsanitize=address
 
 # Directories
 

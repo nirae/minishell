@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 15:08:59 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/07/08 01:23:40 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/22 23:10:35 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 
 # include "libft.h"
 # include <stdarg.h>
+
+/*
+** If we are on Linux
+*/
+
+# ifdef __linux__
+#  include <stdint.h>
+# endif
 
 /*
 ** MACROS for struct t_env

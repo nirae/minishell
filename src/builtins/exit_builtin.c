@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 16:26:48 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:42:36 by ndubouil         ###   ########.fr       */
+/*   Updated: 2018/12/22 22:55:54 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void		exit_builtin(char *arg, char ****commands)
 {
 	int		i;
 
-	if (*commands)
+	if (commands && *commands)
 	{
 		i = -1;
 		while ((*commands)[++i])
