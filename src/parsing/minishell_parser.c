@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:47:40 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 05:30:57 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/19 16:48:27 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ static int	replace_tild(char **str)
 		if ((*str)[1] == '/')
 			tmp = ft_strdup(&(*str)[1]);
 		else
-			tmp = "";
+			tmp = ft_strdup("");
 		ft_strdel(str);
 		if (!(*str = ft_strjoin(myvarenv->content, tmp)))
+		{
+			ft_strdel(&tmp);
 			return (FALSE);
+		}
+		ft_strdel(&tmp);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -57,9 +61,9 @@ int			minishell_parser(char *input, char ****commands_tab)
 {
 	char	**separated_commands;
 
-	if (!(*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *))))
-		return (FALSE);
 	if (!input[0])
+		return (FALSE);
+	if (!(*commands_tab = ft_memalloc((ft_strlen(input) + 1) * sizeof(char *))))
 		return (FALSE);
 	if (!(separated_commands = ft_strsplit(input, ';')))
 		return (FALSE);
