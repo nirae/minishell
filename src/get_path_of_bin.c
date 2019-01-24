@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 03:09:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 05:37:09 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/24 05:39:39 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char		*get_complete_path(char *parent, char *name)
 	char	*result;
 
 	if (name[0] == '/' || name[0] == '.')
-		return (name);
+		return (ft_strdup(name));
 	if (parent == NULL)
 	{
 		if (!(result = ft_strjoin("./", name)))
@@ -73,6 +73,7 @@ static char		*check_file_exist_in_path(struct stat *st, char **cmp_path,
 		else if (S_ISDIR(st->st_mode) && path[0])
 		{
 			ft_printf("minishell: %s: is a directory\n", path);
+			ft_strdel(cmp_path);
 			ft_strtabdel(env_paths);
 			return (NULL);
 		}
@@ -105,14 +106,15 @@ static char		*search_path(char ***env_paths, char *path)
 			if (!(*env_paths)[i + 1])
 			{
 				ft_printf("minishell: command not found: %s\n", path);
-				ft_strtabdel(env_paths);
+				// ft_strtabdel(env_paths);
 				ft_strdel(&cmp_path);
-				break ;
+				// break ;
+				return (NULL);
 			}
 		}
 		ft_strdel(&cmp_path);
 	}
-	ft_strtabdel(env_paths);
+	// ft_strtabdel(env_paths);
 	return (NULL);
 }
 
@@ -120,6 +122,7 @@ char			*get_path_of_bin(char *path)
 {
 	char		**env_paths;
 	struct stat	st;
+	char *result;
 
 	stat(path, &st);
 	if (access(path, F_OK) == 0)
@@ -141,5 +144,7 @@ char			*get_path_of_bin(char *path)
 		ft_printf("minishell: command not found: %s\n", path);
 		return (NULL);
 	}
-	return (search_path(&env_paths, path));
+	result = search_path(&env_paths, path);
+	ft_strtabdel(&env_paths);
+	return (result);
 }
