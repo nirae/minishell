@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 03:09:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/24 05:39:39 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/26 22:50:26 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,12 @@ static char		*search_path(char ***env_paths, char *path)
 			if (!(*env_paths)[i + 1])
 			{
 				ft_printf("minishell: command not found: %s\n", path);
-				// ft_strtabdel(env_paths);
 				ft_strdel(&cmp_path);
-				// break ;
 				return (NULL);
 			}
 		}
 		ft_strdel(&cmp_path);
 	}
-	// ft_strtabdel(env_paths);
 	return (NULL);
 }
 
@@ -122,7 +119,7 @@ char			*get_path_of_bin(char *path)
 {
 	char		**env_paths;
 	struct stat	st;
-	char *result;
+	char		*result;
 
 	stat(path, &st);
 	if (access(path, F_OK) == 0)
@@ -133,17 +130,11 @@ char			*get_path_of_bin(char *path)
 				return (path);
 		}
 		else
-		{
-			ft_printf("minishell: %s: Permission denied\n", path);
-			return (NULL);
-		}
+			return (perm_denied(path));
 	}
 	env_paths = get_env_paths(g_env_lst);
 	if (!env_paths)
-	{
-		ft_printf("minishell: command not found: %s\n", path);
-		return (NULL);
-	}
+		return (cmd_not_found(path));
 	result = search_path(&env_paths, path);
 	ft_strtabdel(&env_paths);
 	return (result);

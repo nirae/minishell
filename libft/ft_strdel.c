@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 12:42:02 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 04:11:55 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/26 22:26:58 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	ft_strdel(char **as)
 {
-	if (*as != NULL)
+	if (as != NULL && *as != NULL)
 	{
 		free(*as);
 		*as = NULL;
+		as = NULL;
 	}
 }

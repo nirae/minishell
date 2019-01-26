@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 03:10:46 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/26 22:45:41 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int					exec_command(char **command, char **env);
 char				*get_path_of_bin(char *path);
 int					read_prompt(const int fd, char **line);
 int					get_complete_command(char **str);
+void				*cmd_not_found(char *str);
+void				*perm_denied(char *str);
 int					replace_dollar(char **final_str, int *i);
 /*
 **	PARSING

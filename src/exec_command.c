@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 02:21:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/24 05:38:11 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/26 22:40:34 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int				exec_command(char **command, char **env)
 		signal(SIGINT, catch_signal_kill);
 		waitpid(g_pid, &status, 0);
 	}
-	// if (command[0][0] != '.' && command[0][0] != '/')
-	ft_strdel(&final_path);
+	if (command[0][0] != '/')
+		ft_strdel(&final_path);
 	return (TRUE);
 }
