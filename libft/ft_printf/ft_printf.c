@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 09:38:44 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/27 12:58:54 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/27 21:14:55 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int		ft_printf(const char *str, ...)
 	env.len = 0;
 	env.buff.len = 0;
 	env.buff.pos_last_conv = 0;
+	ft_bzero(env.buff.buff, BUFFER_SIZE);
 	ret = check_string(&env, string);
 	if (ret == FAIL)
 		return (-1);
