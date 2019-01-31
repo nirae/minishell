@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 03:09:35 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/30 02:22:54 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 02:13:46 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static char		*search_path(char ***env_paths, char *path)
 	{
 		cmp_path = get_complete_path((*env_paths)[i], path);
 		if (access(cmp_path, F_OK) == 0)
-			return(check_file_exist_in_path(&st, &cmp_path, env_paths, path));
+			return (check_file_exist_in_path(&st, &cmp_path, env_paths, path));
 		else
 		{
 			if (!(*env_paths)[i + 1])

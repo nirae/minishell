@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 02:21:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/30 02:22:36 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 02:12:39 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int				exec_command(char **command, char **env)
 {
 	int		status;
 	char	*final_path;
-	
+
 	if (!command[0][0] || !(final_path = get_path_of_bin(command[0])))
 		return (FALSE);
 	g_pid = fork();
