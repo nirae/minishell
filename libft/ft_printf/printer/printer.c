@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/26 23:28:07 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/28 10:39:39 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:42:46 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static int		dispatch(t_env *env)
 {
-	if ((env->flags.type == 'c' && env->flags.size == L) ||
-			env->flags.type == 'C')
+	if ((env->flags.type == 'c' && env->flags.size == L)
+		|| env->flags.type == 'C')
 		return (print_big_char(env));
-	else if ((env->flags.type == 's' && env->flags.size == L) ||
-			env->flags.type == 'S')
+	else if ((env->flags.type == 's' && env->flags.size == L)
+		|| env->flags.type == 'S')
 		return (print_big_string(env));
 	else if (env->flags.type == '%')
 		return (print_percent(env));
@@ -28,8 +28,8 @@ static int		dispatch(t_env *env)
 		return (print_string(env));
 	else if (env->flags.type == 'p')
 		return (print_address(env));
-	else if (env->flags.type == 'd' || env->flags.type == 'i' ||
-			env->flags.type == 'D')
+	else if (env->flags.type == 'd' || env->flags.type == 'i'
+		|| env->flags.type == 'D')
 		return (print_number(env));
 	else if (env->flags.type == 'u' || env->flags.type == 'U')
 		return (print_unsigned_number(env));

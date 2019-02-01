@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/26 21:21:19 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/28 10:32:39 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:31:39 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void			print_prefix(t_env *env)
 {
-	if (env->flags.hash && (ft_strcmp("0", env->types.str) != 0 ||
-			env->flags.precision > 1))
+	if (env->flags.hash && (ft_strcmp("0", env->types.str) != 0
+		|| env->flags.precision > 1))
 	{
 		if (env->flags.type == 'X')
 			env->len += putstr_in_buffer(&env->buff, "0X");

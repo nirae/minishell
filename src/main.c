@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/27 01:02:06 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/19 16:48:51 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/02/01 03:22:57 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void		ft_minishell(void)
 	commands = NULL;
 	while (666)
 	{
-		signal(SIGINT, catch_signal);
 		ft_printf("%s", PROMPT);
+		signal(SIGINT, catch_signal);
 		if (!get_complete_command(&complete_cmd) || complete_cmd[0] == -1)
 			exit_builtin("0", NULL);
 		if (!(minishell_parser(complete_cmd, &commands)))

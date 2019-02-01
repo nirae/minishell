@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 22:31:59 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 04:18:20 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:48:41 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int				manage_envvar_args(int options, t_list **env_lst_cpy,
 	t_list	*tmp;
 
 	env_var_args = NULL;
-	if (options & OPT_I)
+	if (options & (1 << ('i' - 'a')))
 		*env_lst_cpy = NULL;
 	else if (!(ft_lstcpy(g_env_lst, env_lst_cpy)))
 		return (FALSE);

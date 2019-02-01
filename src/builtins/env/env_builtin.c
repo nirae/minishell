@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 16:09:13 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 04:16:13 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:48:32 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int				env_builtin(char **args)
 	env_tab = NULL;
 	options_parser(args, &options, &pos_args, set_options);
 	manage_envvar_args(options, &env_lst_cpy, args, &pos_args);
-	if (!pos_args && (options & OPT_I))
+	if (!pos_args && (options & (1 << ('i' - 'a'))))
 		pos_args = 2;
 	else if (!pos_args)
 		pos_args++;
