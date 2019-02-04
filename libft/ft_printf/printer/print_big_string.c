@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/20 20:00:04 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/18 23:21:15 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/02/01 02:58:38 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int		precision_pos(t_env *env, int len)
 		if ((big_len += ft_bigcharlen(env->types.wstr[i]))
 				> env->flags.precision)
 		{
-			big_len -= ft_bigcharlen(env->types.wstr[i]);
 			break ;
 		}
 		if ((get_big_char(env, env->types.wstr[i], result)) == -1)

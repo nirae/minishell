@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:42:39 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/31 08:08:53 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/02/04 04:15:55 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,53 @@ static int		final_return(char **s, int n_lus)
 	return (1);
 }
 
+char			*ft_strjoin_free_s1(char **s1, char **s2)
+{
+	int		i;
+	int		j;
+	char	*dest;
+
+	if (!(s1) || !(s2))
+		return (NULL);
+	i = 0;
+	j = 0;
+	if (!(dest = ft_strnew(ft_strlen(*s1) + ft_strlen(*s2))))
+		return (NULL);
+	while ((*s1)[i])
+	{
+		dest[i] = (*s1)[i];
+		i++;
+	}
+	while ((*s2)[j])
+	{
+		dest[i] = (*s2)[j];
+		j++;
+		i++;
+	}
+	dest[i] = '\0';
+	ft_strdel(s1);
+	return (dest);
+}
+
 int				read_prompt(const int fd, char **line)
 {
 	char		*buff;
 	char		*final_buff;
 	int			n_lus;
-	char		*tmp;
 
-	if (BUFF_SIZE <= 0 || (n_lus = read(fd, "", 0)) == -1)
+	if ((n_lus = read(fd, "", 0)) == -1)
 		return (-1);
 	if (!(buff = ft_strnew(1)))
 		return (-1);
 	final_buff = NULL;
 	while (!ft_strchr(final_buff, '\n') && (n_lus = read(fd, buff, 1)) > 0)
 	{
+		if (!buff[0])
+			break ;
 		if (!final_buff)
 			final_buff = ft_strdup(buff);
 		else
-		{
-			tmp = final_buff;
-			final_buff = ft_strjoin(tmp, buff);
-			ft_strdel(&tmp);
-		}
+			final_buff = ft_strjoin_free_s1(&final_buff, &buff);
 		ft_strclr(buff);
 	}
 	ft_strdel(&buff);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_unsigned_number.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndubouil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/30 15:34:01 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/26 15:23:35 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:41:51 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ static int		print_string_with_precision(t_env *env, int len)
 static int		get_number(t_env *env)
 {
 	if (env->flags.size == L || env->flags.type == 'U')
-		env->types.str =
-			ft_ulli_itoa_base(va_arg(env->va, unsigned long int), "0123456789");
+		env->types.str = ft_ulli_itoa_base(va_arg(env->va, unsigned long int)
+			, "0123456789");
 	else if (env->flags.size == H)
 		env->types.str = ft_ulli_itoa_base((unsigned short)
 				va_arg(env->va, int), "0123456789");
@@ -70,8 +70,8 @@ static int		get_number(t_env *env)
 		env->types.str = ft_ulli_itoa_base((unsigned long long)
 				va_arg(env->va, unsigned long long int), "0123456789");
 	else
-		env->types.str =
-			ft_ulli_itoa_base(va_arg(env->va, unsigned int), "0123456789");
+		env->types.str = ft_ulli_itoa_base(va_arg(env->va, unsigned int)
+			, "0123456789");
 	if (env->types.str == NULL)
 		return (FALSE);
 	return (TRUE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_octal.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ndubouil <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/30 18:36:53 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/28 10:40:16 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:41:02 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static int		print_string_with_precision(t_env *env, int len)
 	if ((ft_strcmp(env->types.str, "0") == 0) && env->flags.precision == 0
 			&& env->flags.hash == 0)
 		return (TRUE);
-	if (env->flags.hash && (ft_strcmp("0", env->types.str) != 0 ||
-			env->flags.precision > 1))
+	if (env->flags.hash && (ft_strcmp("0", env->types.str) != 0
+		|| env->flags.precision > 1))
 		env->len += putchar_in_buffer(&env->buff, '0');
 	if (env->flags.precision > len + env->flags.hash)
 	{
@@ -71,8 +71,8 @@ static int		get_number(t_env *env)
 		env->types.str = ft_ulli_itoa_base((unsigned char)
 			va_arg(env->va, int), "01234567");
 	else if (env->flags.size == L || env->flags.type == 'O')
-		env->types.str =
-			ft_ulli_itoa_base(va_arg(env->va, unsigned long int), "01234567");
+		env->types.str = ft_ulli_itoa_base(va_arg(env->va, unsigned long int)
+			, "01234567");
 	else if (env->flags.size == LL)
 		env->types.str = ft_ulli_itoa_base(
 			va_arg(env->va, unsigned long long int), "01234567");
@@ -83,8 +83,8 @@ static int		get_number(t_env *env)
 		env->types.str = ft_ulli_itoa_base((unsigned long long)
 			va_arg(env->va, unsigned long long int), "01234567");
 	else
-		env->types.str =
-			ft_ulli_itoa_base(va_arg(env->va, unsigned int), "01234567");
+		env->types.str = ft_ulli_itoa_base(va_arg(env->va, unsigned int)
+			, "01234567");
 	if (env->types.str == NULL)
 		return (FALSE);
 	return (TRUE);

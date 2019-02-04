@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/27 16:21:23 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 00:34:34 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/02/01 04:09:07 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int			get_complete_command(char **str)
 	ft_strdel(&line);
 	i = -1;
 	while (final_str[++i])
-		if (final_str[i] == '$')
+		if (final_str[i] == '$' && final_str[i + 1] && final_str[i + 1] != '$')
 			replace_dollar(&final_str, &i);
 	*str = final_str;
 	return (1);

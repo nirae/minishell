@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/01 14:46:49 by ndubouil          #+#    #+#             */
-/*   Updated: 2019/01/29 08:00:07 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/02/01 03:48:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,14 @@
 # define OPTIONS_CD		"LP"
 # define OPTIONS_ENV	"i"
 # define OPTIONS_ECHO	"n"
-# define OPT_L 			(1 << 27)
-# define OPT_P 			(1 << 28)
-# define OPT_I			(1 << ('i' - 'a'))
-# define OPT_N			(1 << ('n' - 'a'))
+
+/*
+**	MEMO OPTIONS
+**		OPT_L 			(1 << 27)
+**		OPT_P 			(1 << 28)
+**		OPT_I			(1 << ('i' - 'a'))
+**		OPT_N			(1 << ('n' - 'a'))
+*/
 
 pid_t				g_pid;
 t_list				*g_env_lst;

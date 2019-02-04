@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 18:26:03 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/12/20 02:33:44 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:47:59 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static int		set_options(char *ops, int *options, int pos)
 	if (is_valid_option(ops[pos], OPTIONS_CD))
 	{
 		if (ops[pos] == 'L')
-			*options |= OPT_L;
+			*options |= (1 << 27);
 		else if (ops[pos] == 'P')
-			*options |= OPT_P;
+			*options |= (1 << 28);
 	}
 	else
 	{
@@ -52,7 +52,7 @@ int				change_directory(char *pwd, char *oldpwd, int options)
 	{
 		if (!(change_env_var(&g_env_lst, "OLDPWD", oldpwd)))
 			return (malloc_error_set_errno());
-		if (options & OPT_P)
+		if (options & (1 << 28))
 		{
 			if (!(change_env_var(&g_env_lst, "PWD", getcwd(NULL, 0))))
 				return (malloc_error_set_errno());

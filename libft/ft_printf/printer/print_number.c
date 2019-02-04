@@ -6,7 +6,7 @@
 /*   By: ndubouil <ndubouil@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/28 22:17:55 by ndubouil          #+#    #+#             */
-/*   Updated: 2018/06/26 22:04:20 by ndubouil         ###   ########.fr       */
+/*   Updated: 2019/01/31 21:39:09 by ndubouil         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,26 @@ static int		print_string_with_precision(t_env *env, int len)
 static int		get_number(t_env *env)
 {
 	if (env->flags.size == H)
-		env->types.str =
-			ft_lli_itoa_base((short)va_arg(env->va, int), "0123456789");
+		env->types.str = ft_lli_itoa_base((short)va_arg(env->va, int)
+			, "0123456789");
 	else if (env->flags.size == HH)
-		env->types.str =
-			ft_lli_itoa_base((char)va_arg(env->va, int), "0123456789");
+		env->types.str = ft_lli_itoa_base((char)va_arg(env->va, int)
+			, "0123456789");
 	else if (env->flags.size == L || env->flags.type == 'D')
-		env->types.str =
-			ft_lli_itoa_base(va_arg(env->va, long int), "0123456789");
+		env->types.str = ft_lli_itoa_base(va_arg(env->va, long int)
+			, "0123456789");
 	else if (env->flags.size == LL)
-		env->types.str =
-			ft_lli_itoa_base(va_arg(env->va, long long int), "0123456789");
+		env->types.str = ft_lli_itoa_base(va_arg(env->va, long long int)
+			, "0123456789");
 	else if (env->flags.size == J)
-		env->types.str =
-			ft_lli_itoa_base(va_arg(env->va, intmax_t), "0123456789");
+		env->types.str = ft_lli_itoa_base(va_arg(env->va, intmax_t)
+			, "0123456789");
 	else if (env->flags.size == Z)
-		env->types.str =
-			ft_lli_itoa_base(va_arg(env->va, size_t), "0123456789");
+		env->types.str = ft_lli_itoa_base(va_arg(env->va, size_t)
+			, "0123456789");
 	else
-		env->types.str =
-			ft_lli_itoa_base(va_arg(env->va, int), "0123456789");
+		env->types.str = ft_lli_itoa_base(va_arg(env->va, int)
+			, "0123456789");
 	if (env->types.str == NULL)
 		return (FALSE);
 	return (TRUE);
